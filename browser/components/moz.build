@@ -1,0 +1,10 @@
+# -*- Mode: python; indent-tabs-mode: nil; tab-width: 40 -*-
+# vim: set filetype=python:
+
+DIRS += [
+    "bms",
+    "csk",
+    "floorp-search",
+    "search",
+    "workspaces",
+]

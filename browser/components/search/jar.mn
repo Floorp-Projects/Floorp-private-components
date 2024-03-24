@@ -1,0 +1,4 @@
+browser.jar:
+        search-extensions/floorp (extensions/floorp/**)
+
+% resource search-extensions %search-extensions/ contentaccessible=yes

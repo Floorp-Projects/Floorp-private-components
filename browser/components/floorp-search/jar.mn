@@ -1,0 +1,5 @@
+
+browser.jar:
+   content/browser/floorp-search/search-result.js              (content/search-result.js)
+   content/browser/floorp-search/search-result.css             (content/search-result.css)
+   content/browser/floorp-search/search-result.html            (content/search-result.html)
