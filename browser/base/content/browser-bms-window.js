@@ -118,12 +118,16 @@ var gBmsWindow = {
         document.head.appendChild(BMSSyleElement);
 
         window.setInterval(() => {
-            let zoomLevel = this.webapnelData.zoomLevel;
-            if (zoomLevel) {
-                window.ZoomManager.zoom = zoomLevel;
-            }
-        }, 500);
+            gBmsWindow.setZoomLevel();
+        }, 100);
     },
+
+    setZoomLevel() {
+        let zoomLevel = gBmsWindow.webapnelData.zoomLevel;
+        if (zoomLevel) {
+            window.ZoomManager.zoom = zoomLevel;
+        }
+    }
 };
 
 if (Services.prefs.getBoolPref("floorp.browser.sidebar2.addons.enabled")) {
