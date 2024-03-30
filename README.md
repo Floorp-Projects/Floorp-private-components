@@ -4,4 +4,4 @@
 
 ## License
 
--  CC BY-NC-SA 4.0 Deed (Attribution-NonCommercial-ShareAlike 4.0 International)
+-  Floorp SHARED SOURCE LICENSE (Based on the MICROSOFT SHARED SOURCE CLI, C#, AND JSCRIPT LICENSE)
