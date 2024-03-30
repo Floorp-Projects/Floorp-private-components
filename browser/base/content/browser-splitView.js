@@ -39,15 +39,16 @@ let gSplitView = {
         }
         
         .deck-selected {
-          flex: 1 !important;
-          order: 1 !important;
+          order: 2 !important;
         }
         
         .deck-selected[splitview="right"] {
-          order: 3 !important;
+          flex: 1 !important;
+          order: 5 !important;
         }
         
         .deck-selected[splitview="left"] {
+          flex: 1 !important;
           order: 0 !important;
         }
         
@@ -63,6 +64,15 @@ let gSplitView = {
       panel.setAttribute("splitviewtab", true);
       panel.classList.add("deck-selected");
       browserRenderLayers = true;
+
+      this.splitter = document.createXULElement("splitter");
+      this.splitter.className = "splitView-splitter";
+
+      if (side == "left") {
+        document.querySelector(".deck-selected[splitview='left']").after(this.splitter)
+      } else {
+        document.querySelector(".deck-selected[splitview='right']").before(this.splitter)
+      }
 
       if (!browserDocShellIsActiveState) {
         browser.docShellIsActive = true;
