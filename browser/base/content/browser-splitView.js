@@ -39,19 +39,25 @@ let gSplitView = {
         }
         
         .deck-selected {
+          flex: auto !important;
           order: 2 !important;
         }
         
         .deck-selected[splitview="right"] {
-          flex: 1 !important;
+          flex: auto !important;
           order: 5 !important;
         }
         
         .deck-selected[splitview="left"] {
-          flex: 1 !important;
+          flex: auto !important;
           order: 0 !important;
         }
-        
+
+        .splitView-splitter {
+          flex: 0 !important;
+          width: 4px !important;
+        }
+
         #tabbrowser-tabpanels {
           display: flex !important;
         }
@@ -67,6 +73,7 @@ let gSplitView = {
 
       this.splitter = document.createXULElement("splitter");
       this.splitter.className = "splitView-splitter";
+      this.splitter.classList.add("deck-selected");
 
       if (side == "left") {
         document.querySelector(".deck-selected[splitview='left']").after(this.splitter)
@@ -95,6 +102,7 @@ let gSplitView = {
       let CSSElem = document.getElementById("splitViewCSS");
       CSSElem?.remove();
 
+      document.querySelector(".splitView-splitter")?.remove();
       tab.removeAttribute("splitView");
       panel.removeAttribute("splitview");
       panel.removeAttribute("splitviewtab");
