@@ -953,7 +953,8 @@ var gWorkspaces = {
     }
 
     if (Services.prefs.getBoolPref(workspacesPreferences.WORKSPACES_ENABLED_PREF)) {
-      let isWebpanelWindow = new URL(window.location.href).searchParams.get("url");
+      // if Id exists, it is webpanel window.
+      let isWebpanelWindow = new URL(window.location.href).searchParams.get("floorpWebPanelId");
       let isSsWindow = window.floorpSsbWindow
       if (isWebpanelWindow || isSsWindow) {
         return;

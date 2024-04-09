@@ -16,19 +16,19 @@ var gBmsWindow = {
     },
 
     get loadURL() {
-        return this.currentURL.searchParams.get("url");
+        return this.webapnelData.url;
     },
 
     get webpanelId() {
-        return this.currentURL.searchParams.get("webPanelId");
+        return this.currentURL.searchParams.get("floorpWebPanelId");
     },
 
     get userContextId() {
-        return this.currentURL.searchParams.get("userContextId");
+        return this.webapnelData.usercontext ? this.webapnelData.usercontext : 0;
     },
 
     get userAgent() {
-        return this.currentURL.searchParams.get("userAgent");
+        return this.webapnelData.userAgent ? this.webapnelData.userAgent : false;
     },
 
     get webapnelData() {
@@ -42,8 +42,8 @@ var gBmsWindow = {
             return;
         }
 
-        let loadURL = new URL(window.location.href).searchParams.get("url");
-        if (!loadURL) {
+        let webPanelId = new URL(window.location.href).searchParams.get("floorpWebPanelId");
+        if (!webPanelId) {
             return;
         }
 
@@ -64,10 +64,12 @@ var gBmsWindow = {
         let currentURL = new URL(window.location.href);
         this.currentURL = currentURL;
 
-        let loadURL = currentURL.searchParams.get("url");
-        let userContextId = Number(currentURL.searchParams.get("userContextId"));
-        let userAgent = currentURL.searchParams.get("userAgent") == true;
-        let webPanelId = currentURL.searchParams.get("webPanelId");
+        let webPanelId = currentURL.searchParams.get("floorpWebPanelId");
+        let userContextId = this.userContextId;
+        let userAgent = this.userAgent;
+        let loadURL = this.loadURL;
+
+        console.log("createWebpanelWindow", webPanelId, userContextId, userAgent, loadURL);
 
         this.mainWindow.setAttribute("BSM-window", "true");
         this.mainWindow.setAttribute("BMS-usercontextid", userContextId);

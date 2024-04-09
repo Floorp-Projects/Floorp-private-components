@@ -135,7 +135,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         }
 
         let reopenedTabs = targetPanelWindow.gBrowser.tabs;
-        let loadURL = new URL(window.location.href).searchParams.get("url");
+        let loadURL = this.STATIC_SIDEBAR_DATA.data[webpanelId].loadURL;
 
         for (let tab of reopenedTabs) {
             if (tab.getAttribute("usercontextid") == userContextId) {
