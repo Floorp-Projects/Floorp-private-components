@@ -953,7 +953,7 @@ var gWorkspaces = {
     }
 
     if (Services.prefs.getBoolPref(workspacesPreferences.WORKSPACES_ENABLED_PREF)) {
-      let isWebpanelWindow = window.location.toString().split("?")[1];
+      let isWebpanelWindow = new URL(window.location.href).searchParams.get("url");
       let isSsWindow = window.floorpSsbWindow
       if (isWebpanelWindow || isSsWindow) {
         return;

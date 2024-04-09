@@ -9,31 +9,32 @@ var gBrowser = window.gBrowser;
 
 var gBmsWindow = {
     _initialized: false,
+    currentURL: null,
 
     get mainWindow() {
         return document.getElementById("main-window");
     },
 
     get loadURL() {
-        return window.bmsLoadedURI;
+        return this.currentURL.searchParams.get("url");
     },
 
     get webpanelId() {
-        return window.location.toString().split("?")[4];
+        return this.currentURL.searchParams.get("webPanelId");
     },
 
     get userContextId() {
-        return this.mainWindow.getAttribute("BMS-usercontextid");
+        return this.currentURL.searchParams.get("userContextId");
     },
 
     get userAgent() {
-        return this.mainWindow.getAttribute("BMS-useragent");
+        return this.currentURL.searchParams.get("userAgent");
     },
 
     get webapnelData() {
         let id = this.webpanelId;
-        let data = BrowserManagerSidebarPanelWindowUtils.BROWSER_SIDEBAR_DATA;
-        return data.data[id];
+        let data = BrowserManagerSidebarPanelWindowUtils.BROWSER_SIDEBAR_DATA.data;
+        return data[id];
     },
 
     init() {
@@ -41,7 +42,7 @@ var gBmsWindow = {
             return;
         }
 
-        let loadURL = window.location.toString().split("?")[1];
+        let loadURL = new URL(window.location.href).searchParams.get("url");
         if (!loadURL) {
             return;
         }
@@ -60,11 +61,13 @@ var gBmsWindow = {
     },
 
     createWebpanelWindow() {
-        let arry = window.location.toString().split("?");
-        let loadURL = arry[1];
-        let userContextId = Number(arry[2]);
-        let userAgent = arry[3] == "true";
-        let webPanelId = arry[4];
+        let currentURL = new URL(window.location.href);
+        this.currentURL = currentURL;
+
+        let loadURL = currentURL.searchParams.get("url");
+        let userContextId = Number(currentURL.searchParams.get("userContextId"));
+        let userAgent = currentURL.searchParams.get("userAgent") == true;
+        let webPanelId = currentURL.searchParams.get("webPanelId");
 
         this.mainWindow.setAttribute("BSM-window", "true");
         this.mainWindow.setAttribute("BMS-usercontextid", userContextId);

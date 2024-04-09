@@ -14,7 +14,7 @@ const keyboradShortcutConfig = JSON.parse(
 
 const buildShortCutkeyFunctions = {
   init() {
-    let IsBMSWindow = window.location.toString().split("?")[1];
+    let IsBMSWindow = new URL(window.location.href).searchParams.get("url");
     if (IsBMSWindow) {
         return;
     }
