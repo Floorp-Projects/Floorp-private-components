@@ -50,7 +50,6 @@ export const BrowserManagerSidebarPanelWindowUtils = {
     },
 
     reloadPanel(window, webpanelId, isParentWindow) {
-        console.log("reloadPanel", window, webpanelId, isParentWindow);
         let targetPanelWindow = null;
 
         if (isParentWindow) {
@@ -135,7 +134,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         }
 
         let reopenedTabs = targetPanelWindow.gBrowser.tabs;
-        let loadURL = this.STATIC_SIDEBAR_DATA.data[webpanelId].loadURL;
+        let loadURL = BrowserManagerSidebarPanelWindowUtils.BROWSER_SIDEBAR_DATA.data[webpanelId].url;
 
         for (let tab of reopenedTabs) {
             if (tab.getAttribute("usercontextid") == userContextId) {

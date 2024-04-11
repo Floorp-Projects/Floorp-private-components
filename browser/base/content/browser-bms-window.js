@@ -9,7 +9,7 @@ var gBrowser = window.gBrowser;
 
 var gBmsWindow = {
     _initialized: false,
-    currentURL: null,
+    currentURL: new URL(window.location.href),
 
     get mainWindow() {
         return document.getElementById("main-window");
@@ -28,7 +28,7 @@ var gBmsWindow = {
     },
 
     get userAgent() {
-        return this.webapnelData.userAgent ? this.webapnelData.userAgent : false;
+        return this.webapnelData?.userAgent ? this.webapnelData.userAgent : false;
     },
 
     get webapnelData() {
@@ -61,15 +61,10 @@ var gBmsWindow = {
     },
 
     createWebpanelWindow() {
-        let currentURL = new URL(window.location.href);
-        this.currentURL = currentURL;
-
-        let webPanelId = currentURL.searchParams.get("floorpWebPanelId");
+        let webPanelId = this.currentURL.searchParams.get("floorpWebPanelId");
         let userContextId = this.userContextId;
         let userAgent = this.userAgent;
         let loadURL = this.loadURL;
-
-        console.log("createWebpanelWindow", webPanelId, userContextId, userAgent, loadURL);
 
         this.mainWindow.setAttribute("BSM-window", "true");
         this.mainWindow.setAttribute("BMS-usercontextid", userContextId);
