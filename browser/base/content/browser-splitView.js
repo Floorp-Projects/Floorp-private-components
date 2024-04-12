@@ -53,7 +53,7 @@ let gSplitView = {
           order: 0 !important;
         }
 
-        .splitView-splitter {
+        #splitView-splitter {
           flex: 0 !important;
           width: 4px !important;
         }
@@ -72,8 +72,8 @@ let gSplitView = {
       browserRenderLayers = true;
 
       this.splitter = document.createXULElement("splitter");
-      this.splitter.className = "splitView-splitter";
-      this.splitter.classList.add("deck-selected");
+      this.splitter.setAttribute("id", "splitView-splitter");
+      this.splitter.className = "deck-selected";
 
       if (side == "left") {
         document.querySelector(".deck-selected[splitview='left']").after(this.splitter)
