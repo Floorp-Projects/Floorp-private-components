@@ -117,7 +117,12 @@ var gBmsWindow = {
         `;
         document.head.appendChild(BMSSyleElement);
 
-        window.setInterval(() => {
+        let setZoomLebelInterval = window.setInterval(() => {
+            if (window.closed) {
+                window.clearInterval(setZoomLebelInterval);
+                return;
+            }
+
             gBmsWindow.setZoomLevel();
         }, 100);
     },
