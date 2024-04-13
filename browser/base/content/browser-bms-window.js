@@ -9,31 +9,32 @@ var gBrowser = window.gBrowser;
 
 var gBmsWindow = {
     _initialized: false,
+    currentURL: new URL(window.location.href),
 
     get mainWindow() {
         return document.getElementById("main-window");
     },
 
     get loadURL() {
-        return window.bmsLoadedURI;
+        return this.webapnelData.url;
     },
 
     get webpanelId() {
-        return window.location.toString().split("?")[4];
+        return this.currentURL.searchParams.get("floorpWebPanelId");
     },
 
     get userContextId() {
-        return this.mainWindow.getAttribute("BMS-usercontextid");
+        return this.webapnelData.usercontext ? this.webapnelData.usercontext : 0;
     },
 
     get userAgent() {
-        return this.mainWindow.getAttribute("BMS-useragent");
+        return this.webapnelData?.userAgent ? this.webapnelData.userAgent : false;
     },
 
     get webapnelData() {
         let id = this.webpanelId;
-        let data = BrowserManagerSidebarPanelWindowUtils.BROWSER_SIDEBAR_DATA;
-        return data.data[id];
+        let data = BrowserManagerSidebarPanelWindowUtils.BROWSER_SIDEBAR_DATA.data;
+        return data[id];
     },
 
     init() {
@@ -41,8 +42,8 @@ var gBmsWindow = {
             return;
         }
 
-        let loadURL = window.location.toString().split("?")[1];
-        if (!loadURL) {
+        let webPanelId = new URL(window.location.href).searchParams.get("floorpWebPanelId");
+        if (!webPanelId) {
             return;
         }
 
@@ -60,11 +61,10 @@ var gBmsWindow = {
     },
 
     createWebpanelWindow() {
-        let arry = window.location.toString().split("?");
-        let loadURL = arry[1];
-        let userContextId = Number(arry[2]);
-        let userAgent = arry[3] == "true";
-        let webPanelId = arry[4];
+        let webPanelId = this.currentURL.searchParams.get("floorpWebPanelId");
+        let userContextId = this.userContextId;
+        let userAgent = this.userAgent;
+        let loadURL = this.loadURL;
 
         this.mainWindow.setAttribute("BSM-window", "true");
         this.mainWindow.setAttribute("BMS-usercontextid", userContextId);
@@ -117,7 +117,12 @@ var gBmsWindow = {
         `;
         document.head.appendChild(BMSSyleElement);
 
-        window.setInterval(() => {
+        let setZoomLebelInterval = window.setInterval(() => {
+            if (window.closed) {
+                window.clearInterval(setZoomLebelInterval);
+                return;
+            }
+
             gBmsWindow.setZoomLevel();
         }, 100);
     },

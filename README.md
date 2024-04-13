@@ -4,4 +4,4 @@
 
 ## License
 
--  Floorp SHARED SOURCE LICENSE (Based on the MICROSOFT SHARED SOURCE CLI, C#, AND JSCRIPT LICENSE)
+- Floorp Shared Source License (Based on the Microsoft Shared Source CLI, C#, and JScript License)

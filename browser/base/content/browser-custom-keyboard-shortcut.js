@@ -14,8 +14,8 @@ const keyboradShortcutConfig = JSON.parse(
 
 const buildShortCutkeyFunctions = {
   init() {
-    let IsBMSWindow = window.location.toString().split("?")[1];
-    if (IsBMSWindow) {
+    let webPanelId = new URL(window.location.href).searchParams.get("floorpWebPanelId");
+    if (webPanelId) {
         return;
     }
 
