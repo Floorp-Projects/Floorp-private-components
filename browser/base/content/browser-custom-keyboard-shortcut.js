@@ -69,13 +69,15 @@ const buildShortCutkeyFunctions = {
   },
 
   buildShortCutkeyFunction(name, key, keyCode, modifiers) {
-    let functionCode =
-      CustomKeyboardShortcutUtils.keyboradShortcutActions[name][0];
-    if (!functionCode) {
+    let functionName =
+      CustomKeyboardShortcutUtils.keyboradShortcutActions[name];
+    if (!functionName) {
       // Remove invalid shortcut key config.
       CustomKeyboardShortcutUtils.removeKeyboradShortcutByActionName(name);
       return;
     }
+
+    const functionCode = CustomKeyboardShortcutUtils.keyboradShortcutActions[name][0];
 
     // Remove " " from modifiers.
     modifiers = modifiers.replace(/ /g, "");
