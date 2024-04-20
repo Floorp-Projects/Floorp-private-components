@@ -72,8 +72,6 @@ const buildShortCutkeyFunctions = {
     let functionName =
       CustomKeyboardShortcutUtils.keyboradShortcutActions[name];
     if (!functionName) {
-      // Remove invalid shortcut key config.
-      CustomKeyboardShortcutUtils.removeKeyboradShortcutByActionName(name);
       return;
     }
 
