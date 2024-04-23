@@ -35,28 +35,13 @@ var { WorkspacesWindowIdUtils } = ChromeUtils.importESModule(
 var { WorkspacesDataSaver } = ChromeUtils.importESModule(
   "resource:///modules/WorkspacesDataSaver.sys.mjs"
 );
-
-var { XPCOMUtils } = ChromeUtils.importESModule(
-  "resource://gre/modules/XPCOMUtils.sys.mjs"
-);
-
-var { setInterval } = ChromeUtils.importESModule(
-  "resource://gre/modules/Timer.sys.mjs"
-);
-
-XPCOMUtils.defineLazyScriptGetter(
-  this,
-  "gWorkspacesWindowUtils",
-  "chrome://browser/content/browser-workspaces.js"
-);
-
 // global variable
-var gBrowser = window.gBrowser;
 var TabContextMenu = window.TabContextMenu;
 
-var gWorkspaces = {
+export const EXPORTED_SYMBOLS = ["gWorkspaces"];
+
+export var gWorkspaces = {
   _initialized: false,
-  _windowId: null,
   _currentWorkspaceId: null,
   _popuppanelNotFound: false,
   _workspaceToolbarButtonNotFound: false,
@@ -272,11 +257,12 @@ var gWorkspaces = {
 
   /* get Workspaces information */
   getCurrentWindowId() {
-    let windowId = gWorkspaces._windowId;
+    let windowId = window.workspacesWindowId;
     if (windowId == null) {
       windowId = WorkspacesWindowUuidService.getGeneratedUuid();
-      gWorkspaces._windowId = windowId;
+      gWorkspaces.workspacesWindowId = windowId;
     }
+
     return windowId;
   },
 
@@ -498,7 +484,7 @@ var gWorkspaces = {
   },
 
   async checkWorkspacesHasTab(workspaceId) {
-    for (let tab of gBrowser.tabs) {
+    for (let tab of window.gBrowser.tabs) {
       if (tab.getAttribute(this.workspacesTabAttributionId) == workspaceId) {
         return true;
       }
@@ -533,16 +519,16 @@ var gWorkspaces = {
       ) || null;
 
     if (willChangeWorkspaceLastShowTab && !currentTabMigration) {
-      if (gBrowser.selectedTab == willChangeWorkspaceLastShowTab) {
+      if (window.gBrowser.selectedTab == willChangeWorkspaceLastShowTab) {
         gWorkspaces.switchToAnotherWorkspaceTab(workspaceId);
       } else {
-        gBrowser.selectedTab = willChangeWorkspaceLastShowTab;
+        window.gBrowser.selectedTab = willChangeWorkspaceLastShowTab;
       }
     } else if (addNewTab) {
       let tab = gWorkspaces.createTabForWorkspace(workspaceId);
-      gBrowser.selectedTab = tab;
+      window.gBrowser.selectedTab = tab;
     } else if (currentTabMigration) {
-      let tab = gBrowser.selectedTab;
+      let tab = window.gBrowser.selectedTab;
       await gWorkspaces.moveTabToWorkspace(workspaceId, tab, true);
     } else {
       gWorkspaces.switchToAnotherWorkspaceTab(workspaceId);
@@ -631,7 +617,7 @@ var gWorkspaces = {
   async moveTabToWorkspace(workspaceId, tab, disableMove = false) {
     let oldWorkspaceId = this.getWorkspaceIdFromAttribute(tab);
     this.setWorkspaceIdToAttribute(tab, workspaceId);
-    if (tab === gBrowser.selectedTab && !disableMove) {
+    if (tab === window.gBrowser.selectedTab && !disableMove) {
       gWorkspaces.switchToAnotherWorkspaceTab(oldWorkspaceId, workspaceId);
     } else {
       gWorkspaces.checkAllTabsForVisibility();
@@ -642,7 +628,7 @@ var gWorkspaces = {
     for (let tab of tabs) {
       this.setWorkspaceIdToAttribute(tab, workspaceId);
 
-      if (tab === gBrowser.selectedTab) {
+      if (tab === window.gBrowser.selectedTab) {
         await gWorkspaces.changeWorkspace(workspaceId);
         gWorkspaces.checkAllTabsForVisibility();
       }
@@ -653,12 +639,12 @@ var gWorkspaces = {
 
   moveTabsToWorkspaceFromTabContextMenu(workspaceId) {
     let reopenedTabs = TabContextMenu.contextTab.multiselected
-      ? gBrowser.selectedTabs
+      ? window.gBrowser.selectedTabs
       : [TabContextMenu.contextTab];
 
     for (let tab of reopenedTabs) {
       this.moveTabToWorkspace(workspaceId, tab);
-      if (tab == gBrowser.selectedTab) {
+      if (tab == window.gBrowser.selectedTab) {
         this.switchToAnotherWorkspaceTab(workspaceId, tab);
       }
 
@@ -673,7 +659,7 @@ var gWorkspaces = {
       url = Services.prefs.getStringPref("browser.startup.homepage");
     }
 
-    let tabs = gBrowser.tabs;
+    let tabs = window.gBrowser.tabs;
     for (let tab of tabs) {
       if (!tab.hasAttribute(this.workspacesTabAttributionId)) {
         this.setWorkspaceIdToAttribute(tab, workspaceId);
@@ -681,7 +667,7 @@ var gWorkspaces = {
       }
     }
 
-    let tab = gBrowser.addTab(url, {
+    let tab = window.gBrowser.addTab(url, {
       skipAnimation: true,
       inBackground: false,
       triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
@@ -691,7 +677,7 @@ var gWorkspaces = {
   },
 
   getWorkspaceFirstTab(workspaceId) {
-    for (let tab of gBrowser.tabs) {
+    for (let tab of window.gBrowser.tabs) {
       if (tab.getAttribute(this.workspacesTabAttributionId) == workspaceId) {
         return tab;
       }
@@ -708,7 +694,7 @@ var gWorkspaces = {
   },
 
   getWorkspaceselectedTab(workspaceId) {
-    for (let tab of gBrowser.tabs) {
+    for (let tab of window.gBrowser.tabs) {
       if (
         tab.getAttribute(WorkspacesService.workspaceLastShowId) == workspaceId
       ) {
@@ -719,9 +705,9 @@ var gWorkspaces = {
   },
 
   removeWorkspaceTabs(workspaceId) {
-    for (let tab of gBrowser.tabs) {
+    for (let tab of window.gBrowser.tabs) {
       if (tab.getAttribute(this.workspacesTabAttributionId) == workspaceId) {
-        gBrowser.removeTab(tab);
+        window.gBrowser.removeTab(tab);
       }
     }
   },
@@ -734,9 +720,9 @@ var gWorkspaces = {
     if (!workspaceTabs.length) {
       let tab = this.createTabForWorkspace(workspaceId);
       this.moveTabToWorkspace(workspaceId, tab);
-      gBrowser.selectedTab = tab;
+      window.gBrowser.selectedTab = tab;
     } else {
-      gBrowser.selectedTab = workspaceTabs[0];
+      window.gBrowser.selectedTab = workspaceTabs[0];
     }
   },
 
@@ -871,7 +857,7 @@ var gWorkspaces = {
     let workspacesCount = await gWorkspaces.getCurrentWorkspacesCount();
 
     // Last Show Workspace Attribute
-    let selectedTab = gBrowser.selectedTab;
+    let selectedTab = window.gBrowser.selectedTab;
     if (
       selectedTab &&
       !selectedTab.hasAttribute(WorkspacesService.workspaceLastShowId) &&
@@ -895,7 +881,7 @@ var gWorkspaces = {
     }
 
     // Check all tabs for visibility
-    let tabs = gBrowser.tabs;
+    let tabs = window.gBrowser.tabs;
     for (let i = 0; i < tabs.length; i++) {
       // Set workspaceId if workspaceId is null
       let workspaceId = gWorkspaces.getWorkspaceIdFromAttribute(tabs[i]);
@@ -912,9 +898,9 @@ var gWorkspaces = {
       let chackedWorkspaceId = gWorkspaces.getWorkspaceIdFromAttribute(tabs[i]);
       if (workspacesCount > 1) {
         if (chackedWorkspaceId == currentWorkspaceId) {
-          gBrowser.showTab(tabs[i]);
+          window.gBrowser.showTab(tabs[i]);
         } else {
-          gBrowser.hideTab(tabs[i]);
+          window.gBrowser.hideTab(tabs[i]);
         }
       }
     }
@@ -971,12 +957,11 @@ var gWorkspaces = {
 
     // Initialized complete
     this._initialized = true;
-
     let currentWorkspace = await gWorkspaces.getCurrentWorkspace();
 
     // Check Workspaces Need migrate from Legacy Workspaces
     await WorkspacesMigratorUtils.importDataFromLegacyWorkspaces(
-      gBrowser.tabs,
+      window.gBrowser.tabs,
       this.getCurrentWindowId()
     );
 
