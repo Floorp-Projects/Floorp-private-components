@@ -260,7 +260,7 @@ export var gWorkspaces = {
     let windowId = window.workspacesWindowId;
     if (windowId == null) {
       windowId = WorkspacesWindowUuidService.getGeneratedUuid();
-      gWorkspaces.workspacesWindowId = windowId;
+      window.workspacesWindowId = windowId;
     }
 
     return windowId;
@@ -1174,7 +1174,7 @@ export var gWorkspaces = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  window.SessionStore.promiseInitialized.then(() => {
+  window.SessionStore.promiseAllWindowsRestored.then(() => {
     window.setTimeout(() => {
       gWorkspaces.init();
     }, 1000);
