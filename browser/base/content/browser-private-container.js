@@ -26,7 +26,7 @@ function initPrivateContainer() {
     beforeElem.before(menuitemElem);
 
     // add URL link a context menu to open in private container.
-    addContextBox(
+    gFloorpContextMenu.addContextBox(
       "open_in_private_container",
       "open-in_private-container",
       "context-openlink",
