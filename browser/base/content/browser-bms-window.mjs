@@ -4,10 +4,6 @@ var { BrowserManagerSidebarPanelWindowUtils } = ChromeUtils.importESModule(
   "resource:///modules/BrowserManagerSidebarPanelWindowUtils.sys.mjs"
 );
 
-// global variables
-
-export const EXPORTED_SYMBOLS = ["gBmsWindow"];
-
 export var gBmsWindow = {
   _initialized: false,
   currentURL: new URL(window.location.href),

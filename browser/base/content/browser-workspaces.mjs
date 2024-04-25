@@ -36,9 +36,6 @@ var { WorkspacesDataSaver } = ChromeUtils.importESModule(
   "resource:///modules/WorkspacesDataSaver.sys.mjs"
 );
 // global variable
-var TabContextMenu = window.TabContextMenu;
-
-export const EXPORTED_SYMBOLS = ["gWorkspaces"];
 
 export var gWorkspaces = {
   _initialized: false,
