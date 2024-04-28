@@ -187,11 +187,11 @@ export var gWorkspaces = {
     let popupElements = this.workspaceButtons;
 
     for (let popupElement of popupElements) {
-      let workspaceId = popupElement.getAttribute("workspaceId");
-      let workspace = await this.getWorkspaceById(workspaceId);
-      if (!workspace) {
+      let popupElementWorkspaceId = popupElement.getAttribute("workspaceId");
+      let gotWorkspace = await this.getWorkspaceById(popupElementWorkspaceId);
+      if (!gotWorkspace) {
         console.warn(
-          "Workspace not found. It may removed or not created " + workspaceId
+          "Workspace not found. It may removed or not created " + popupElementWorkspaceId
         );
         continue;
       }
@@ -224,9 +224,9 @@ export var gWorkspaces = {
 
     this.workspacesPopupContent.removeAttribute("flex");
 
-    const CSS = WorkspacesElementService.manageOnBmsInjectionCSS;
+    const styleSheet = WorkspacesElementService.manageOnBmsInjectionCSS;
     document.head.appendChild(document.createElement("style")).textContent =
-      CSS;
+    styleSheet;
     for (let workspaceButton of this.workspaceButtons) {
       workspaceButton.classList.add("sidepanel-icon");
 
@@ -417,7 +417,7 @@ export var gWorkspaces = {
 
   /* Workspaces manager */
   async createWorkspace(
-    name,
+    workspaceName,
     defaultWorkspace,
     addNewTab = false,
     change = true,
@@ -426,7 +426,7 @@ export var gWorkspaces = {
   ) {
     let windowId = this.getCurrentWindowId();
     let createdWorkspaceId = await WorkspacesService.createWorkspace(
-      name,
+      workspaceName,
       windowId,
       defaultWorkspace,
       icon ? icon : null,
@@ -646,7 +646,7 @@ export var gWorkspaces = {
   moveTabsToWorkspaceFromTabContextMenu(workspaceId) {
     let reopenedTabs = window.TabContextMenu.contextTab.multiselected
       ? window.gBrowser.selectedTabs
-      : [TabContextMenu.contextTab];
+      : [window.TabContextMenu.contextTab];
 
     for (let tab of reopenedTabs) {
       this.moveTabToWorkspace(workspaceId, tab);
@@ -1195,17 +1195,17 @@ export var gWorkspaces = {
         }
 
         let workspaceData = await gWorkspaces.getWorkspaceById(workspaceId);
-        let name = workspaceData.name;
-        let icon = workspaceData.icon;
+        let workspaceName = workspaceData.name;
+        let workspaceIcon = workspaceData.icon;
         let menuItem = window.MozXULElement.parseXULToFragment(`
           <menuitem id="context_MoveTabToOtherWorkspace"
                     class="menuitem-iconic"
-                    style="list-style-image: url(${getWorkspaceIconUrl(icon)})"
+                    style="list-style-image: url(${getWorkspaceIconUrl(workspaceIcon)})"
                     oncommand="gWorkspaces.moveTabsToWorkspaceFromTabContextMenu('${workspaceId}')"
         />`);
 
         // Against XSS
-        menuItem.firstChild.setAttribute("label", name);
+        menuItem.firstChild.setAttribute("label", workspaceName);
 
         let parentElem = document.getElementById("workspacesTabContextMenu");
         parentElem.appendChild(menuItem);
