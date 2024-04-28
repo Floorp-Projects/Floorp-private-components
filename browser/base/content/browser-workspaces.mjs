@@ -4,21 +4,13 @@ var { WorkspacesMigratorUtils } = ChromeUtils.importESModule(
   "resource:///modules/WorkspacesMigratorUtils.sys.mjs"
 );
 
-var { WorkspacesService } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesService.sys.mjs"
-);
-
-var { getWorkspaceIconUrl } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesService.sys.mjs"
-);
-
-var { workspacesPreferences } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesService.sys.mjs"
-);
-
-var { WorkspacesWindowUuidService } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesService.sys.mjs"
-);
+var {
+  WorkspacesService,
+  WorkspacesReorderService,
+  workspacesPreferences,
+  WorkspacesWindowUuidService,
+  getWorkspaceIconUrl,
+} = ChromeUtils.importESModule("resource:///modules/WorkspacesService.sys.mjs");
 
 var { WorkspacesIdUtils } = ChromeUtils.importESModule(
   "resource:///modules/WorkspacesIdUtils.sys.mjs"
@@ -198,7 +190,9 @@ export var gWorkspaces = {
       let workspaceId = popupElement.getAttribute("workspaceId");
       let workspace = await this.getWorkspaceById(workspaceId);
       if (!workspace) {
-        console.warn("Workspace not found. It may removed or not created " + workspaceId);
+        console.warn(
+          "Workspace not found. It may removed or not created " + workspaceId
+        );
         continue;
       }
 
@@ -422,7 +416,14 @@ export var gWorkspaces = {
   },
 
   /* Workspaces manager */
-  async createWorkspace(name, defaultWorkspace, addNewTab = false, change = true, icon, currentTabMigration = false) {
+  async createWorkspace(
+    name,
+    defaultWorkspace,
+    addNewTab = false,
+    change = true,
+    icon,
+    currentTabMigration = false
+  ) {
     let windowId = this.getCurrentWindowId();
     let createdWorkspaceId = await WorkspacesService.createWorkspace(
       name,
@@ -504,7 +505,13 @@ export var gWorkspaces = {
     return false;
   },
 
-  async changeWorkspace(workspaceId, option, addNewTab = false, currentTabMigration = false, saveSelectWorkspace = true) {
+  async changeWorkspace(
+    workspaceId,
+    option,
+    addNewTab = false,
+    currentTabMigration = false,
+    saveSelectWorkspace = true
+  ) {
     if (!this.workspaceEnabled) {
       return;
     }
@@ -549,7 +556,9 @@ export var gWorkspaces = {
         // rebuild the workspaces Toolbar
         await gWorkspaces.rebuildWorkspacesToolbar();
         await gWorkspaces.changeToolbarSelectedWorkspaceView(workspaceId);
-        await gWorkspaces.updateToolbarButtonAndPopupContentIconAndLabel(workspaceId);
+        await gWorkspaces.updateToolbarButtonAndPopupContentIconAndLabel(
+          workspaceId
+        );
         break;
       case 2:
         // Append Workspaces Toolbar Workspace Button
@@ -635,7 +644,7 @@ export var gWorkspaces = {
   },
 
   moveTabsToWorkspaceFromTabContextMenu(workspaceId) {
-    let reopenedTabs = TabContextMenu.contextTab.multiselected
+    let reopenedTabs = window.TabContextMenu.contextTab.multiselected
       ? window.gBrowser.selectedTabs
       : [TabContextMenu.contextTab];
 
@@ -724,7 +733,6 @@ export var gWorkspaces = {
   },
 
   /* Popup & dialog functions */
-
   async renameWorkspaceWithCreatePrompt(workspaceId) {
     let prompts = Services.prompt;
     let workspace = await gWorkspaces.getWorkspaceById(workspaceId);
@@ -859,7 +867,7 @@ export var gWorkspaces = {
       selectedTab &&
       !selectedTab.hasAttribute(WorkspacesService.workspaceLastShowId) &&
       selectedTab.getAttribute(WorkspacesService.workspacesTabAttributionId) ==
-      currentWorkspaceId
+        currentWorkspaceId
     ) {
       let lastShowWorkspaceTabs = document.querySelectorAll(
         `[${WorkspacesService.workspaceLastShowId}="${currentWorkspaceId}"]`
@@ -929,16 +937,41 @@ export var gWorkspaces = {
     }
   },
 
+  /* Reorder Service */
+  async reorderWorkspaceAfterOne(workspaceId) {
+    let windowId = this.getCurrentWindowId();
+    await WorkspacesReorderService.reorderWorkspaceAfterOne(
+      workspaceId,
+      windowId
+    ).then(async () => {
+      await this.changeWorkspace(workspaceId, 1);
+    });
+  },
+
+  async reorderWorkspaceBeforeOne(workspaceId) {
+    let windowId = this.getCurrentWindowId();
+    await WorkspacesReorderService.reorderWorkspaceBeforeOne(
+      workspaceId,
+      windowId
+    ).then(async () => {
+      await this.changeWorkspace(workspaceId, 1);
+    });
+  },
+
   /* init */
   async init() {
     if (this._initialized) {
       return;
     }
 
-    if (Services.prefs.getBoolPref(workspacesPreferences.WORKSPACES_ENABLED_PREF)) {
+    if (
+      Services.prefs.getBoolPref(workspacesPreferences.WORKSPACES_ENABLED_PREF)
+    ) {
       // if Id exists, it is webpanel window.
-      let isWebpanelWindow = new URL(window.location.href).searchParams.get("floorpWebPanelId");
-      let isSsWindow = window.floorpSsbWindow
+      let isWebpanelWindow = new URL(window.location.href).searchParams.get(
+        "floorpWebPanelId"
+      );
+      let isSsWindow = window.floorpSsbWindow;
       if (isWebpanelWindow || isSsWindow) {
         return;
       }
@@ -1002,7 +1035,6 @@ export var gWorkspaces = {
       gWorkspaces.checkAllTabsForVisibility();
     });
 
-    
     setInterval(() => {
       gWorkspaces.checkAllTabsForVisibility();
     }, 100);
@@ -1098,21 +1130,33 @@ export var gWorkspaces = {
         menuElem.firstChild.remove();
       }
 
-      let contextWorkspaceId = event.explicitOriginalTarget.id.replace(
+      const contextWorkspaceId = event.explicitOriginalTarget.id.replace(
         "workspace-",
         ""
       );
-      let defaultWorkspaceId =
+      const defaultWorkspaceId =
         await WorkspacesWindowIdUtils.getDefaultWorkspaceId(
           gWorkspaces.getCurrentWindowId()
         );
-      let isDefaultWorkspace = contextWorkspaceId == defaultWorkspaceId;
+      const beforeSiblingElem = event.explicitOriginalTarget.previousElementSibling?.getAttribute("workspaceId") || null;
+      const afterSiblingElem = event.explicitOriginalTarget.nextElementSibling?.getAttribute("workspaceId") || null;
+      const isDefaultWorkspace = contextWorkspaceId == defaultWorkspaceId;
+      const isBeforeSiblingDefaultWorkspace = beforeSiblingElem == defaultWorkspaceId;
+      const isAfterSiblingExist = afterSiblingElem != null;
+      const needDisableBefore = isDefaultWorkspace || isBeforeSiblingDefaultWorkspace;
+      const needDisableAfter = isDefaultWorkspace || !isAfterSiblingExist;
 
       //create context menu
       let menuItem = window.MozXULElement.parseXULToFragment(`
+          <menuitem data-l10n-id="reorder-this-workspace-to-before" disabled="${needDisableBefore}"
+                    oncommand="gWorkspaces.reorderWorkspaceBeforeOne('${contextWorkspaceId}')"/>
+          <menuitem data-l10n-id="reorder-this-workspace-to-after" disabled="${needDisableAfter}"
+                    oncommand="gWorkspaces.reorderWorkspaceAfterOne('${contextWorkspaceId}')"/>
+          <menuseparator class="workspaces-context-menu-separator"/>
           <menuitem data-l10n-id="rename-this-workspace" accesskey="R" oncommand="gWorkspaces.renameWorkspaceWithCreatePrompt('${contextWorkspaceId}')"></menuitem>
-          <menuitem data-l10n-id="delete-this-workspace" accesskey="D" ${isDefaultWorkspace ? 'disabled="true"' : ""
-        } oncommand="gWorkspaces.deleteWorkspace('${contextWorkspaceId}')"></menuitem>
+          <menuitem data-l10n-id="delete-this-workspace" accesskey="D" ${
+            isDefaultWorkspace ? 'disabled="true"' : ""
+          } oncommand="gWorkspaces.deleteWorkspace('${contextWorkspaceId}')"></menuitem>
           <menuitem data-l10n-id="manage-this-workspaces" oncommand="gWorkspaces.manageWorkspaceFromDialog('${contextWorkspaceId}')"></menuitem>
         `);
       let parentElem = document.getElementById(
@@ -1143,7 +1187,7 @@ export var gWorkspaces = {
       let allWorkspacesId = await gWorkspaces.getAllWorkspacesId();
       for (let workspaceId of allWorkspacesId) {
         let tabWorkspaceId = gWorkspaces.getWorkspaceIdFromAttribute(
-          TabContextMenu.contextTab
+          window.TabContextMenu.contextTab
         );
 
         if (tabWorkspaceId == workspaceId) {
@@ -1170,10 +1214,14 @@ export var gWorkspaces = {
   },
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  window.SessionStore.promiseAllWindowsRestored.then(() => {
-    window.setTimeout(() => {
-      gWorkspaces.init();
-    }, 1000);
-  });
-}, { once: true });
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    window.SessionStore.promiseAllWindowsRestored.then(() => {
+      window.setTimeout(() => {
+        gWorkspaces.init();
+      }, 1000);
+    });
+  },
+  { once: true }
+);

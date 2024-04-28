@@ -1,13 +1,4 @@
 
-export const EXPORTED_SYMBOLS = [
-  "WorkspacesService",
-  "workspacesPreferences",
-  "WorkspacesGroupService",
-  "WorkspacesWindowUuidService",
-  "workspaceIcons",
-  "getWorkspaceIconUrl",
-];
-
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   WorkspacesWindowIdUtils:
@@ -219,17 +210,57 @@ export const WorkspacesService = {
  * @param {string} beforeWorkspaceId - The ID of the workspace before which the target workspace should be placed.
  * @param {string} windowId - The ID of the window containing the workspaces.
  */
-export const WorkspacesGroupService = {
-  reorderingWorkspacesGroupBefore(workspaceId, beforeWorkspaceId, windowId) {
-    let workspacesData =
-      lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
-    let workspaceIds = Object.keys(workspacesData);
-    let index = workspaceIds.indexOf(workspaceId);
-    let beforeIndex = workspaceIds.indexOf(beforeWorkspaceId);
-    workspaceIds.splice(index, 1);
-    workspaceIds.splice(beforeIndex, 0, workspaceId);
-    workspacesData[workspaceId].tabs = workspaceIds;
-    lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+export const WorkspacesReorderService = {
+  /**
+   * Reorders a workspace to before one
+   *
+   * @param {string} workspaceId - The ID of the workspace to be reordered.
+   * @param {string} windowId - The ID of the window containing the workspaces.
+   */
+  async reorderWorkspaceBeforeOne(workspaceId, windowId) {
+    const currentWorkspacesData = await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
+    const keys = Object.keys(currentWorkspacesData);
+    const index = keys.indexOf(workspaceId);
+
+    if (index > 0) {
+        keys.splice(index, 1);
+        keys.splice(index - 1, 0, workspaceId);
+
+        let newWorkspacesData = {};
+        keys.forEach(key => {
+            newWorkspacesData[key] = currentWorkspacesData[key];
+        });
+
+        await lazy.WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
+    } else {
+        console.error("Cannot move the first workspace before.");
+    }
+  },
+
+  /**
+   * Reorders a workspace to after one
+   *
+   * @param {string} workspaceId - The ID of the workspace to be reordered.
+   * @param {string} windowId - The ID of the window containing the workspaces.
+   */
+
+  async reorderWorkspaceAfterOne(workspaceId, windowId) {
+    const currentWorkspacesData = await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
+    const keys = Object.keys(currentWorkspacesData);
+    const index = keys.indexOf(workspaceId);
+
+    if (index < keys.length - 1 && index > -1) {
+        keys.splice(index, 1);
+        keys.splice(index + 1, 0, workspaceId);
+
+        let newWorkspacesData = {};
+        keys.forEach(key => {
+            newWorkspacesData[key] = currentWorkspacesData[key];
+        });
+        await lazy.WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
+    } else {
+        console.error("Cannot move the first workspace after.");
+    }
   },
 };
 
