@@ -217,7 +217,7 @@ export const WorkspacesReorderService = {
    * @param {string} workspaceId - The ID of the workspace to be reordered.
    * @param {string} windowId - The ID of the window containing the workspaces.
    */
-  async reorderWorkspaceBeforeOne(workspaceId, windowId) {
+  async reorderWorkspaceUp(workspaceId, windowId) {
     const currentWorkspacesData = await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
     const keys = Object.keys(currentWorkspacesData);
     const index = keys.indexOf(workspaceId);
@@ -244,7 +244,7 @@ export const WorkspacesReorderService = {
    * @param {string} windowId - The ID of the window containing the workspaces.
    */
 
-  async reorderWorkspaceAfterOne(workspaceId, windowId) {
+  async reorderWorkspaceDown(workspaceId, windowId) {
     const currentWorkspacesData = await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
     const keys = Object.keys(currentWorkspacesData);
     const index = keys.indexOf(workspaceId);

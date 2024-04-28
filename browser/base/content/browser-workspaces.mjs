@@ -938,9 +938,9 @@ export var gWorkspaces = {
   },
 
   /* Reorder Service */
-  async reorderWorkspaceAfterOne(workspaceId) {
+  async reorderWorkspaceDown(workspaceId) {
     let windowId = this.getCurrentWindowId();
-    await WorkspacesReorderService.reorderWorkspaceAfterOne(
+    await WorkspacesReorderService.reorderWorkspaceDown(
       workspaceId,
       windowId
     ).then(async () => {
@@ -948,9 +948,9 @@ export var gWorkspaces = {
     });
   },
 
-  async reorderWorkspaceBeforeOne(workspaceId) {
+  async reorderWorkspaceUp(workspaceId) {
     let windowId = this.getCurrentWindowId();
-    await WorkspacesReorderService.reorderWorkspaceBeforeOne(
+    await WorkspacesReorderService.reorderWorkspaceUp(
       workspaceId,
       windowId
     ).then(async () => {
@@ -1148,10 +1148,10 @@ export var gWorkspaces = {
 
       //create context menu
       let menuItem = window.MozXULElement.parseXULToFragment(`
-          <menuitem data-l10n-id="reorder-this-workspace-to-before" disabled="${needDisableBefore}"
-                    oncommand="gWorkspaces.reorderWorkspaceBeforeOne('${contextWorkspaceId}')"/>
-          <menuitem data-l10n-id="reorder-this-workspace-to-after" disabled="${needDisableAfter}"
-                    oncommand="gWorkspaces.reorderWorkspaceAfterOne('${contextWorkspaceId}')"/>
+          <menuitem data-l10n-id="reorder-this-workspace-to-up" disabled="${needDisableBefore}"
+                    oncommand="gWorkspaces.reorderWorkspaceUp('${contextWorkspaceId}')"/>
+          <menuitem data-l10n-id="reorder-this-workspace-to-down" disabled="${needDisableAfter}"
+                    oncommand="gWorkspaces.reorderWorkspaceDown('${contextWorkspaceId}')"/>
           <menuseparator class="workspaces-context-menu-separator"/>
           <menuitem data-l10n-id="rename-this-workspace" accesskey="R" oncommand="gWorkspaces.renameWorkspaceWithCreatePrompt('${contextWorkspaceId}')"></menuitem>
           <menuitem data-l10n-id="delete-this-workspace" accesskey="D" ${
