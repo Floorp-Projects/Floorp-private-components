@@ -196,10 +196,10 @@ export var gWorkspaces = {
         continue;
       }
 
-      popupElement.setAttribute("label", workspace.name);
-      popupElement.setAttribute("tooltiptext", workspace.name);
+      popupElement.setAttribute("label", gotWorkspace.name);
+      popupElement.setAttribute("tooltiptext", gotWorkspace.name);
       popupElement.style.listStyleImage = `url(${getWorkspaceIconUrl(
-        workspace.icon
+        gotWorkspace.icon
       )})`;
     }
   },
