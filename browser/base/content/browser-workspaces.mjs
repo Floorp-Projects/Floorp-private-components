@@ -27,8 +27,112 @@ var { WorkspacesWindowIdUtils } = ChromeUtils.importESModule(
 var { WorkspacesDataSaver } = ChromeUtils.importESModule(
   "resource:///modules/WorkspacesDataSaver.sys.mjs"
 );
-// global variable
 
+var { CustomizableUI } = ChromeUtils.importESModule(
+  "resource:///modules/CustomizableUI.sys.mjs"
+);
+
+/**
+ *
+ * @typedef {object} gWorkspaces - Object of Floorp's Workspaces feature.
+ * @property {boolean} _initialized - Indicates if the workspaces object has been initialized.
+ * @property {string|null} _currentWorkspaceId - The ID of the current workspace.
+ * @property {boolean} _popuppanelNotFound - Indicates if the popup panel is not found.
+ * @property {boolean} _workspaceToolbarButtonNotFound - Indicates if the workspace toolbar button is not found.
+ * @property {boolean} _workspaceManageOnBMSMode - Indicates if the workspace management is in BMS mode.
+ * @property {boolean} _workspacesTemporarilyDisabled - Indicates if the workspaces are temporarily disabled.
+ *
+ * @property {HTMLElement} titlebar - The titlebar element.
+ * @property {HTMLElement} TabsToolbar - The TabsToolbar element.
+ * @property {HTMLElement} workspacesToolbarButtonPanel - The workspaces toolbar button panel element.
+ * @property {HTMLElement} workspacesToolbarButton - The workspaces toolbar button element.
+ * @property {HTMLElement} workspacesPopupContent - The workspaces popup content element.
+ * @property {HTMLElement} arrowscrollbox - The arrowscrollbox element.
+ * @property {HTMLElement} TabsToolbartoolbarItems - The toolbar items in the TabsToolbar.
+ * @property {NodeList} workspaceButtons - The list of workspace buttons.
+ *
+ * @property {Localization} l10n - The localization object.
+ *
+ * @property {Function} rebuildWorkspacesToolbar - Rebuilds the workspaces toolbar.
+ * @property {Function} rebuildWorkspacesLabels - Rebuilds the workspaces labels.
+ * @property {Function} addToolbarWorkspaceButtonToAppend - Adds a toolbar workspace button to append.
+ * @property {Function} changeToolbarSelectedWorkspaceView - Changes the selected workspace view in the toolbar.
+ * @property {Function} updateToolbarButtonAndPopupContentIconAndLabel - Updates the toolbar button and popup content icon and label.
+ * @property {Function} enableWorkspacesManageOnBMSMode - Enables the workspace management in BMS mode.
+ *
+ * @property {boolean} workspaceEnabled - Indicates if the workspace is enabled.
+ *
+ * @property {string} getCurrentWindowId - Gets the current window ID.
+ * @property {object} getCurrentWorkspace - Gets the current workspace.
+ * @property {string} getCurrentWorkspaceId - Gets the current workspace ID.
+ * @property {object} getCurrentWorkspacesData - Gets the current workspaces data.
+ * @property {object} getCurrentWorkspacesDataWithoutPreferences - Gets the current workspaces data without preferences.
+ * @property {number} getCurrentWorkspacesCount - Gets the current workspaces count.
+ * @property {object} getDefaultWorkspace - Gets the default workspace.
+ * @property {string} getDefaultWorkspaceId - Gets the default workspace ID.
+ * @property {Array<string>} getAllWorkspacesBlockElements - Gets all workspace block elements.
+ * @property {string} getWorkspaceBlockElement - Gets a workspace block element string. Parse it to a fragment before appending it to the DOM.
+ * @property {object} getWorkspaceById - Gets a workspace by ID.
+ * @property {Array<string>} getAllWorkspacesId - Gets all workspace IDs.
+ *
+ * @property {Function} saveWorkspacesDataWithoutOverwritingPreferences - Saves the workspaces data without overwriting preferences.
+ * @property {Function} saveWorkspaceData - Saves the workspace data. It overrites the existing all preferences.
+ * @property {Function} saveWindowPreferences - Saves the current window's workspaces preferences.
+ *
+ * @property {string} getWorkspaceIdFromAttribute - Gets the workspace ID from an attribute.
+ * @property {Function} setWorkspaceIdToAttribute - Sets the workspace ID to an attribute.
+ * @property {Function} removeTabFromWorkspace - Removes a tab from a workspace.
+ * @property {Function} removeWorkspaceById - Removes a workspace by ID.
+ * @property {Function} removeWindowWorkspacesDataById - Removes the window's workspaces data by ID.
+ *
+ * @property {Function} createWorkspace - Creates a workspace.
+ * @property {Function} createNoNameWorkspace - Creates a workspace with no name.
+ * @property {Function} deleteWorkspace - Deletes a workspace.
+ * @property {Function} renameWorkspace - Renames a workspace.
+ * @property {Function} setDefaultWorkspace - Sets the default workspace.
+ *
+ * @property {Function} checkWorkspacesHasTab - Checks if a workspace has a tab.
+ * @property {Function} checkAllWorkspacesHasTab - Checks if all workspaces have a tab.
+ *
+ * @property {Function} changeWorkspace - Changes the workspace.
+ * @property {Function} changeWorkspaceToDefaultWorkspace - Changes the workspace to the default workspace.
+ * @property {Function} changeWorkspaceToNextOrBeforeWorkspace - Changes the workspace to the next or before workspace.
+ * @property {Function} workspaceIdExists - Checks if a workspace ID exists in the current window.
+ * @property {Function} setSelectWorkspace - Sets the selected workspace. Use chnageWorkspace instead of this function.
+ *
+ * @property {string} workspacesTabAttributionId - The workspaces tab attribution ID.
+ *
+ * @property {Function} moveTabToWorkspace - Moves a tab to a workspace.
+ * @property {Function} moveTabsToWorkspace - Moves tabs to a workspace.
+ * @property {Function} moveTabsToWorkspaceFromTabContextMenu - Moves tabs to a workspace from the selected tabs from tab context menu.
+ * @property {Function} createTabForWorkspace - Creates a tab for a workspace.
+ *
+ * @property {Function} getWorkspaceFirstTab - Gets the first tab of a workspace.
+ * @property {Function} getWorkspaceSelectedTab - Gets the selected tab of a workspace.
+ *
+ * @property {Function} removeWorkspaceTabs - Removes the tabs of a workspace.
+ *
+ * @property {Function} switchToAnotherWorkspaceTab - Switches to another workspace tab.
+ *
+ * @property {Function} renameWorkspaceWithCreatePrompt - Renames a workspace with a create prompt.
+ * @property {Function} manageWorkspaceFromDialog - Manages a workspace from a dialog.
+ *
+ * @property {Function} getWorkspaceIcon - Gets the workspace's icon.
+ * @property {Function} setWorkspaceIcon - Sets the workspace's icon.
+ * @property {Function} getWorkspaceContainerUserContextId - Gets the workspace container user context ID.
+ * @property {Function} setWorkspaceContainerUserContextId - Sets the workspace container user context ID.
+ * @property {Function} setWorkspaceContainerUserContextIdAndIcon - Sets the workspace container user context ID and icon.
+ *
+ * @property {Function} checkAllTabsForVisibility - Checks all tabs for visibility by the workspace.
+ *
+ * @property {Function} reorderWorkspaceDown - Reorders the workspace down.
+ * @property {Function} reorderWorkspaceUp - Reorders the workspace up.
+ *
+ * @property {Function} createWorkspacesToolbarButton - Creates the workspaces toolbar button.
+ *
+ * @property {Function} init - Initializes the workspaces feature.
+ *
+ */
 export var gWorkspaces = {
   _initialized: false,
   _currentWorkspaceId: null,
@@ -191,7 +295,8 @@ export var gWorkspaces = {
       let gotWorkspace = await this.getWorkspaceById(popupElementWorkspaceId);
       if (!gotWorkspace) {
         console.warn(
-          "Workspace not found. It may removed or not created " + popupElementWorkspaceId
+          "Workspace not found. It may removed or not created " +
+            popupElementWorkspaceId
         );
         continue;
       }
@@ -226,7 +331,7 @@ export var gWorkspaces = {
 
     const styleSheet = WorkspacesElementService.manageOnBmsInjectionCSS;
     document.head.appendChild(document.createElement("style")).textContent =
-    styleSheet;
+      styleSheet;
     for (let workspaceButton of this.workspaceButtons) {
       workspaceButton.classList.add("sidepanel-icon");
 
@@ -691,15 +796,7 @@ export var gWorkspaces = {
     return null;
   },
 
-  checkWorkspaceHasTab(workspaceId) {
-    let firstTab = this.getWorkspaceFirstTab(workspaceId);
-    if (firstTab) {
-      return true;
-    }
-    return false;
-  },
-
-  getWorkspaceselectedTab(workspaceId) {
+  getWorkspaceSelectedTab(workspaceId) {
     for (let tab of window.gBrowser.tabs) {
       if (
         tab.getAttribute(WorkspacesService.workspaceLastShowId) == workspaceId
@@ -958,6 +1055,54 @@ export var gWorkspaces = {
     });
   },
 
+  /* Toolbar Button */
+  async createWorkspacesToolbarButton() {
+    const widgetId = "workspaces-toolbar-button";
+    const widget = CustomizableUI.getWidget(widgetId);
+    if (widget && widget.type !== "custom") {
+      return;
+    }
+    const l10n = new Localization(["browser/floorp.ftl", "branding/brand.ftl"]);
+    const l10nText = await l10n.formatValue("workspaces-toolbar-button");
+    CustomizableUI.createWidget({
+      id: widgetId,
+      type: "button",
+      label: l10nText,
+      tooltiptext: l10nText,
+      overflows: false,
+      removable: true,
+      onCreated(aNode) {
+        aNode.setAttribute("type", "menu");
+        const popup = window.MozXULElement.parseXULToFragment(
+          WorkspacesElementService.panelElement
+        );
+        aNode.appendChild(popup);
+      },
+      onCommand() {
+        let currentWindow =
+          Services.wm.getMostRecentWindow("navigator:browser");
+        const panel = currentWindow.document.getElementById(
+          "workspacesToolbarButtonPanel"
+        );
+        panel.openPopup(
+          document.getElementById("workspaces-toolbar-button"),
+          "bottomright topright",
+          0,
+          0,
+          false,
+          false
+        );
+      },
+    });
+    if (
+      ChromeUtils.importESModule("resource:///modules/FloorpStartup.sys.mjs")
+        .isFirstRun
+    ) {
+      CustomizableUI.addWidgetToArea(widgetId, CustomizableUI.AREA_TABSTRIP);
+      CustomizableUI.moveWidgetWithinArea(widgetId, -1);
+    }
+  },
+
   /* init */
   async init() {
     if (this._initialized) {
@@ -983,7 +1128,7 @@ export var gWorkspaces = {
 
     // toolbar button
     // eslint-disable-next-line no-undef
-    workspacesToolbarButton();
+    await this.createWorkspacesToolbarButton();
 
     // Initialized complete
     this._initialized = true;
@@ -1138,12 +1283,20 @@ export var gWorkspaces = {
         await WorkspacesWindowIdUtils.getDefaultWorkspaceId(
           gWorkspaces.getCurrentWindowId()
         );
-      const beforeSiblingElem = event.explicitOriginalTarget.previousElementSibling?.getAttribute("workspaceId") || null;
-      const afterSiblingElem = event.explicitOriginalTarget.nextElementSibling?.getAttribute("workspaceId") || null;
+      const beforeSiblingElem =
+        event.explicitOriginalTarget.previousElementSibling?.getAttribute(
+          "workspaceId"
+        ) || null;
+      const afterSiblingElem =
+        event.explicitOriginalTarget.nextElementSibling?.getAttribute(
+          "workspaceId"
+        ) || null;
       const isDefaultWorkspace = contextWorkspaceId == defaultWorkspaceId;
-      const isBeforeSiblingDefaultWorkspace = beforeSiblingElem == defaultWorkspaceId;
+      const isBeforeSiblingDefaultWorkspace =
+        beforeSiblingElem == defaultWorkspaceId;
       const isAfterSiblingExist = afterSiblingElem != null;
-      const needDisableBefore = isDefaultWorkspace || isBeforeSiblingDefaultWorkspace;
+      const needDisableBefore =
+        isDefaultWorkspace || isBeforeSiblingDefaultWorkspace;
       const needDisableAfter = isDefaultWorkspace || !isAfterSiblingExist;
 
       //create context menu
@@ -1200,7 +1353,9 @@ export var gWorkspaces = {
         let menuItem = window.MozXULElement.parseXULToFragment(`
           <menuitem id="context_MoveTabToOtherWorkspace"
                     class="menuitem-iconic"
-                    style="list-style-image: url(${getWorkspaceIconUrl(workspaceIcon)})"
+                    style="list-style-image: url(${getWorkspaceIconUrl(
+                      workspaceIcon
+                    )})"
                     oncommand="gWorkspaces.moveTabsToWorkspaceFromTabContextMenu('${workspaceId}')"
         />`);
 
