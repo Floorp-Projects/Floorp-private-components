@@ -1,5 +1,6 @@
-/* eslint-disable no-undef */
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
+
+import { gFloorpContextMenu } from "chrome://browser/content/browser-context-menu.mjs";
 
 const { PrivateContainer } = ChromeUtils.importESModule(
   "resource:///modules/PrivateContainer.sys.mjs"
@@ -16,13 +17,13 @@ export const gFloorpPrivateContainer = {
     PrivateContainer.Functions.StartupCreatePrivateContainer();
     PrivateContainer.Functions.removePrivateContainerData();
 
-    SessionStore.promiseInitialized.then(() => {
-      gBrowser.tabContainer.addEventListener(
+    window.SessionStore.promiseInitialized.then(() => {
+      window.gBrowser.tabContainer.addEventListener(
         "TabClose",
         gFloorpPrivateContainer.removeDataIfPrivateContainerTabNotExist
       );
 
-      gBrowser.tabContainer.addEventListener("TabOpen", gFloorpPrivateContainer.handleTabModifications);
+      window.gBrowser.tabContainer.addEventListener("TabOpen", gFloorpPrivateContainer.handleTabModifications);
 
       // Add a tab context menu to reopen in private container.
       let beforeElem = document.getElementById("context_selectAllTabs");
@@ -54,7 +55,7 @@ export const gFloorpPrivateContainer = {
       return false;
     }
   
-    let tabs = gBrowser.tabs;
+    let tabs = window.gBrowser.tabs;
     for (let i = 0; i < tabs.length; i++) {
       if (tabs[i].userContextId === privateContainer.userContextId) {
         return true;
@@ -71,7 +72,7 @@ export const gFloorpPrivateContainer = {
         PrivateContainer.Functions.removePrivateContainerData();
       }
 
-      let tabs = gBrowser.tabs;
+      let tabs = window.gBrowser.tabs;
       let result = [];
       for (let i = 0; i < tabs.length; i++) {
         if (tabs[i].userContextId === privateContainerUserContextID) {
@@ -99,7 +100,7 @@ export const gFloorpPrivateContainer = {
   },
 
   handleTabModifications() {
-    let tabs = gBrowser.tabs;
+    let tabs = window.gBrowser.tabs;
     for (let i = 0; i < tabs.length; i++) {
       if (gFloorpPrivateContainer.checkTabIsPrivateContainer(tabs[i]) && !gFloorpPrivateContainer.tabIsSaveHistory(tabs[i])) {
         gFloorpPrivateContainer.applyDoNotSaveHistoryToTab(tabs[i]);
@@ -127,7 +128,7 @@ export const gFloorpPrivateContainer = {
     Services.obs.notifyObservers(
       {
         wrappedJSObject: new Promise(resolve => {
-          openTrustedLinkIn(url, "tab", {
+          window.openTrustedLinkIn(url, "tab", {
             relatedToCurrent,
             resolveOnNewTabCreated: resolve,
             userContextId: privateContainerUserContextID,
@@ -140,9 +141,9 @@ export const gFloorpPrivateContainer = {
   reopenInPrivateContainer() {
     let userContextId =
       PrivateContainer.Functions.getPrivateContainerUserContextId();
-    let reopenedTabs = TabContextMenu.contextTab.multiselected
-      ? gBrowser.selectedTabs
-      : [TabContextMenu.contextTab];
+    let reopenedTabs = window.TabContextMenu.contextTab.multiselected
+      ? window.gBrowser.selectedTabs
+      : [window.TabContextMenu.contextTab];
   
     for (let tab of reopenedTabs) {
       /* Create a triggering principal that is able to load the new tab
@@ -156,9 +157,9 @@ export const gFloorpPrivateContainer = {
       } else {
         // For lazy tab browsers, get the original principal
         // from SessionStore
-        let tabState = JSON.parse(SessionStore.getTabState(tab));
+        let tabState = JSON.parse(window.SessionStore.getTabState(tab));
         try {
-          triggeringPrincipal = E10SUtils.deserializePrincipal(
+          triggeringPrincipal = window.E10SUtils.deserializePrincipal(
             tabState.triggeringPrincipal_base64
           );
         } catch (ex) {
@@ -187,21 +188,21 @@ export const gFloorpPrivateContainer = {
         userContextId = 0;
       }
   
-      let newTab = gBrowser.addTab(tab.linkedBrowser.currentURI.spec, {
+      let newTab = window.gBrowser.addTab(tab.linkedBrowser.currentURI.spec, {
         userContextId,
         pinned: tab.pinned,
         index: tab._tPos + 1,
         triggeringPrincipal,
       });
   
-      if (gBrowser.selectedTab == tab) {
-        gBrowser.selectedTab = newTab;
+      if (window.gBrowser.selectedTab == tab) {
+        window.gBrowser.selectedTab = newTab;
       }
       if (tab.muted && !newTab.muted) {
         newTab.toggleMuteAudio(tab.muteReason);
       }
   
-      gBrowser.removeTab(tab);
+      window.gBrowser.removeTab(tab);
     }
   },
 };
