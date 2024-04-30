@@ -1,6 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-const gFloorpStatusBar = {
+export const gFloorpStatusBar = {
   initialized: false,
   init() {
     document.getElementById("navigator-toolbox").appendChild(this.elements.statusbar);

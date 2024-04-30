@@ -1,10 +1,6 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-/* SplitView is a feature that provides show a tab on the left or right side of the window. */
-
-let gSplitView = {
+export const gSplitView = {
   Functions: {
     init() {
       gSplitView.Functions.tabContextMenu.addContextMenuToTabContext();
@@ -18,11 +14,10 @@ let gSplitView = {
 
       let panel = gSplitView.Functions.getlinkedPanel(tab.linkedPanel);
       let browser = tab.linkedBrowser;
-      let browserRenderLayers = browser.renderLayers;
       let browserDocShellIsActiveState = browser.docShellIsActive;
 
       // Check if the a tab is already in split view
-      let tabs = gBrowser.tabs;
+      let tabs = window.gBrowser.tabs;
       for (let i = 0; i < tabs.length; i++) {
         if (tabs[i].hasAttribute("splitView")) {
           gSplitView.Functions.removeSplitView(tabs[i]);
@@ -62,7 +57,6 @@ let gSplitView = {
       panel.setAttribute("splitview", side);
       panel.setAttribute("splitviewtab", true);
       panel.classList.add("deck-selected");
-      browserRenderLayers = true;
 
       if (!browserDocShellIsActiveState) {
         browser.docShellIsActive = true;
@@ -89,16 +83,15 @@ let gSplitView = {
       panel.removeAttribute("splitview");
       panel.removeAttribute("splitviewtab");
       panel.classList.remove("deck-selected");
-      browserRenderLayers = false;
 
-      if (browser.docShellIsActive) {
-        browser.docShellIsActive = false;
+      if (window.browser.docShellIsActive) {
+        window.browser.docShellIsActive = false;
       }
 
       gSplitView.Functions.removeRenderLayersEvent();
 
       // set renderLayers to true & Set class to deck-selected
-      gBrowser.selectedTab = tab;
+      window.gBrowser.selectedTab = tab;
     },
 
     getlinkedPanel(id) {
@@ -124,10 +117,10 @@ let gSplitView = {
       }
 
       let currentSplitViewTab = document.querySelector(
-        `.tabbrowser-tab[splitView="true"]`,
+        `.tabbrowser-tab[splitView="true"]`
       );
       let currentSplitViewPanel = gSplitView.Functions.getlinkedPanel(
-        currentSplitViewTab?.linkedPanel,
+        currentSplitViewTab?.linkedPanel
       );
       let currentSplitViewBrowser = currentSplitViewTab?.linkedBrowser;
 
@@ -147,18 +140,18 @@ let gSplitView = {
         currentSplitViewBrowser.renderLayers = true;
         currentSplitViewPanel?.classList.add("deck-selected");
 
-        if (!browser.docShellIsActive) {
-          browser.docShellIsActive = true;
+        if (!window.browser.docShellIsActive) {
+          window.browser.docShellIsActive = true;
         }
       }
 
       (function modifyDeckSelectedClass() {
-        let tabs = gBrowser.tabs;
+        let tabs = window.gBrowser.tabs;
         for (let i = 0; i < tabs.length; i++) {
           let panel = gSplitView.Functions.getlinkedPanel(tabs[i].linkedPanel);
           if (
             tabs[i].hasAttribute("splitView") ||
-            tabs[i] == gBrowser.selectedTab
+            tabs[i] == window.gBrowser.selectedTab
           ) {
             panel?.classList.add("deck-selected");
           } else {
@@ -191,7 +184,7 @@ let gSplitView = {
         }
 
         //Rebuild context menu
-        if (event.target == gBrowser.selectedTab) {
+        if (event.target === window.gBrowser.selectedTab) {
           let menuItem = window.MozXULElement.parseXULToFragment(`
                    <menuitem data-l10n-id="workspace-context-menu-selected-tab" disabled="true"/>
                   `);
@@ -217,5 +210,4 @@ let gSplitView = {
   },
 };
 
-// Init
 gSplitView.Functions.init();
