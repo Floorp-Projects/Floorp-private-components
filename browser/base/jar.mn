@@ -9,5 +9,5 @@ browser.jar:
   content/browser/browser-private-container.mjs                (content/browser-private-container.mjs)
   content/browser/browser-splitView.mjs                        (content/browser-splitView.mjs)
   content/browser/browser-statusbar.mjs                        (content/browser-statusbar.mjs)
-  content/browser/browser-UI-customizing-menu.js               (content/browser-UI-customizing-menu.js)
+  content/browser/browser-UI-customizing-menu.mjs              (content/browser-UI-customizing-menu.mjs)
   content/browser/browser-workspaces.mjs                       (content/browser-workspaces.mjs)

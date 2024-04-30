@@ -4,11 +4,36 @@
 // This script adds a button & menu to customize toolbar mode.
 // Remove addons button from toolbar toggle button.
 
-let gFloorpCustomizeMode = {
+export const gFloorpCustomizeMode = {
+  initialized: false,
+
+  init() {
+    if (this.initialized) {
+      return;
+    }
+
+    let elem = window.MozXULElement.parseXULToFragment(`
+       <checkbox id="customization-visibility-unified-extensions-button-checkbox" class="customizationmode-checkbox"
+                 oncommand="gFloorpCustomizeMode.toggleUnifiedExtensionsButton(!this.checked)" data-l10n-id="floorp-customize-mode-unified-extensions-button"
+      />`);
+    let enabled = !Services.prefs.getBoolPref(
+      "floorp.hide.unifiedExtensionsButtton",
+      false
+    );
+    gFloorpCustomizeMode.addElemToCustomizeModeArea(
+      elem,
+      enabled,
+      "customization-titlebar-visibility-checkbox",
+      "after",
+      0
+    );
+
+    this.initialized = true;
+  },
   addElemToCustomizeModeArea(elem, enabled, targetId, type, retry) {
     if (retry > 3) {
       throw new Error(
-        `Retry count is over. targetId: ${targetId}, type: ${type}`,
+        `Retry count is over. targetId: ${targetId}, type: ${type}`
       );
     }
 
@@ -22,7 +47,7 @@ let gFloorpCustomizeMode = {
       let button = document.getElementById(targetId);
       if (!button) {
         throw new Error(
-          `targetElem is not found. targetId: ${targetId}, type: ${type}`,
+          `targetElem is not found. targetId: ${targetId}, type: ${type}`
         );
       }
       switch (type) {
@@ -46,7 +71,7 @@ let gFloorpCustomizeMode = {
               enabled,
               targetId,
               type,
-              retry + 1,
+              retry + 1
             );
             observer.disconnect();
           }
@@ -62,21 +87,3 @@ let gFloorpCustomizeMode = {
     Services.prefs.setBoolPref("floorp.hide.unifiedExtensionsButtton", enabled);
   },
 };
-
-(function addToggleVisibleUnifiedExtensionButton() {
-  let elem = window.MozXULElement.parseXULToFragment(`
-     <checkbox id="customization-visibility-unified-extensions-button-checkbox" class="customizationmode-checkbox"
-               oncommand="gFloorpCustomizeMode.toggleUnifiedExtensionsButton(!this.checked)" data-l10n-id="floorp-customize-mode-unified-extensions-button"
-    />`);
-  let enabled = !Services.prefs.getBoolPref(
-    "floorp.hide.unifiedExtensionsButtton",
-    false,
-  );
-  gFloorpCustomizeMode.addElemToCustomizeModeArea(
-    elem,
-    enabled,
-    "customization-titlebar-visibility-checkbox",
-    "after",
-    0,
-  );
-})();
