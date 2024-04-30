@@ -100,7 +100,7 @@ export const keyboradShortcutActions = {
     openScreenCapture: ["ScreenshotsUtils.notify(window, 'shortcut')", "open-screen-capture", "tools-action"],
 
     // PIP actions
-    showPIP: ["floorpCustomCSKActions.PictureInPicture.togglePictureInPicture(event)", "show-pip", "pip-action"],
+    showPIP: ["gFloorpCSKActionFunctions.PictureInPicture.togglePictureInPicture(event)", "show-pip", "pip-action"],
 
     // Bookmark actions
     bookmarkThisPage: ["BrowserPageActions.doCommandForAction(PageActions.actionForID('bookmark'), event, this);", "bookmark-this-page", "bookmark-action"],
@@ -161,11 +161,11 @@ export const keyboradShortcutActions = {
     closeSplitView: ["gSplitView.Functions.removeSplitView()", "close-split-view", "split-view-action"],
 
     // Custom actions
-    customAction1: ["customActionsFunctions.evalCustomeActionWithNum(1)", "custom-action-1", "custom-action"],
-    customAction2: ["customActionsFunctions.evalCustomeActionWithNum(2)", "custom-action-2", "custom-action"],
-    customAction3: ["customActionsFunctions.evalCustomeActionWithNum(3)", "custom-action-3", "custom-action"],
-    customAction4: ["customActionsFunctions.evalCustomeActionWithNum(4)", "custom-action-4", "custom-action"],
-    customAction5: ["customActionsFunctions.evalCustomeActionWithNum(5)", "custom-action-5", "custom-action"]
+    customAction1: ["gFloorpCustomActionFunctions.evalCustomeActionWithNum(1)", "custom-action-1", "custom-action"],
+    customAction2: ["gFloorpCustomActionFunctions.evalCustomeActionWithNum(2)", "custom-action-2", "custom-action"],
+    customAction3: ["gFloorpCustomActionFunctions.evalCustomeActionWithNum(3)", "custom-action-3", "custom-action"],
+    customAction4: ["gFloorpCustomActionFunctions.evalCustomeActionWithNum(4)", "custom-action-4", "custom-action"],
+    customAction5: ["gFloorpCustomActionFunctions.evalCustomeActionWithNum(5)", "custom-action-5", "custom-action"]
 }
 
 export const modifiersList = {

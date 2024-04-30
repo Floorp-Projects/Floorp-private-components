@@ -3,16 +3,36 @@
 const CustomKeyboardShortcutUtils = ChromeUtils.importESModule(
   "resource:///modules/CustomKeyboardShortcutUtils.sys.mjs",
 );
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-const keyboradShortcutConfig = JSON.parse(
-  Services.prefs.getStringPref(
-    CustomKeyboardShortcutUtils.SHORTCUT_KEY_AND_ACTION_PREF,
-    "",
-  ),
-);
+/** Floorp's custom functions used for custom actions */
+export const gFloorpCustomActionFunctions = {
+  evalCustomeActionWithNum(num) {
+    let action = Services.prefs.getStringPref(
+      `floorp.custom.shortcutkeysAndActions.customAction${num}`,
+    );
+    Function(action)();
+  },
+};
 
-const buildShortCutkeyFunctions = {
+/** 
+ * Floorp's custom functions used for CSK
+ * If you need add actions for CSK, you can add it here.
+ */
+
+export const gFloorpCSKActionFunctions = {
+  PictureInPicture: {
+    // PictureInPicture.onCommand only works if browser is focused.
+    // So, we need to focus the browser window after calling PictureInPicture.onCommand.
+    togglePictureInPicture(event) {
+      window.PictureInPicture.onCommand(event);
+      window.setTimeout(() => {
+        window.focus();
+      }, 500);
+    }
+  }
+}
+
+export const gFloorpCustomShortcutKeys = {
   init() {
     let webPanelId = new URL(window.location.href).searchParams.get("floorpWebPanelId");
     if (webPanelId) {
@@ -30,7 +50,7 @@ const buildShortCutkeyFunctions = {
       )
     ) {
       window.SessionStore.promiseInitialized.then(() => {
-        buildShortCutkeyFunctions.disableAllCustomKeyShortcut();
+        gFloorpCustomShortcutKeys.disableAllCustomKeyShortcut();
         console.info("Remove already exist shortcut keys");
       });
     }
@@ -50,14 +70,14 @@ const buildShortCutkeyFunctions = {
     }
 
     for (let shortcutObj of keyboradShortcutConfig) {
-      let name = shortcutObj.actionName;
+      let actionName = shortcutObj.actionName;
       let key = shortcutObj.key;
       let keyCode = shortcutObj.keyCode;
       let modifiers = shortcutObj.modifiers;
 
-      if ((key && name) || (keyCode && name)) {
-        buildShortCutkeyFunctions.buildShortCutkeyFunction(
-          name,
+      if ((key && actionName) || (keyCode && actionName)) {
+        gFloorpCustomShortcutKeys.buildShortCutkeyFunction(
+          actionName,
           key,
           keyCode,
           modifiers,
@@ -68,20 +88,20 @@ const buildShortCutkeyFunctions = {
     }
   },
 
-  buildShortCutkeyFunction(name, key, keyCode, modifiers) {
+  buildShortCutkeyFunction(actionName, key, keyCode, modifiers) {
     let functionName =
-      CustomKeyboardShortcutUtils.keyboradShortcutActions[name];
+      CustomKeyboardShortcutUtils.keyboradShortcutActions[actionName];
     if (!functionName) {
       return;
     }
 
-    const functionCode = CustomKeyboardShortcutUtils.keyboradShortcutActions[name][0];
+    const functionCode = CustomKeyboardShortcutUtils.keyboradShortcutActions[actionName][0];
 
     // Remove " " from modifiers.
     modifiers = modifiers.replace(/ /g, "");
 
     let keyElement = window.MozXULElement.parseXULToFragment(`
-            <key id="${name}" class="floorpCustomShortcutKey"
+            <key id="${actionName}" class="floorpCustomShortcutKey"
                  modifiers="${modifiers}"
                  key="${key}"
                  oncommand="${functionCode}"
@@ -90,7 +110,7 @@ const buildShortCutkeyFunctions = {
 
     if (keyCode) {
       keyElement = window.MozXULElement.parseXULToFragment(`
-           <key id="${name}" class="floorpCustomShortcutKey"
+           <key id="${actionName}" class="floorpCustomShortcutKey"
                 oncommand="${functionCode}"
                 keycode="${keyCode}"
              />`);
@@ -137,32 +157,4 @@ const buildShortCutkeyFunctions = {
   },
 };
 
-let customActionsFunctions = {
-  evalCustomeActionWithNum(num) {
-    let action = Services.prefs.getStringPref(
-      `floorp.custom.shortcutkeysAndActions.customAction${num}`,
-    );
-    Function(action)();
-  },
-};
-
-buildShortCutkeyFunctions.init();
-
-
-/** 
- * Floorp's custom functions used for CSK
- * If you need add actions for CSK, you can add it here.
- */
-
-const floorpCustomCSKActions = {
-  PictureInPicture: {
-    // PictureInPicture.onCommand only works if browser is focused.
-    // So, we need to focus the browser window after calling PictureInPicture.onCommand.
-    togglePictureInPicture(event) {
-      window.PictureInPicture.onCommand(event);
-      window.setTimeout(() => {
-        window.focus();
-      }, 500);
-    }
-  }
-}
+gFloorpCustomShortcutKeys.init();
