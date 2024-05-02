@@ -1,4 +1,5 @@
-export const EXPORTED_SYMBOLS = ["WorkspacesExternalFileService"];
+
+/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
 export const WorkspacesExternalFileService = {
   get _workspacesStoreFile() {

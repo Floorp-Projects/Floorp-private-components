@@ -12,13 +12,13 @@ browser.jar:
   content/browser/browser-workspaces.mjs                        (content/browser-workspaces.mjs)
 
 # ES Modules (Not used directly modules)
-  content/browser/modules/workspaces/WorkspacesDataSaver.sys.mjs           (content/modules/workspaces/WorkspacesDataSaver.sys.mjs)
-  content/browser/modules/workspaces/WorkspacesElementService.sys.mjs      (content/modules/workspaces/WorkspacesElementService.sys.mjs)
-  content/browser/modules/workspaces/WorkspacesExternalFileService.sys.mjs (content/modules/workspaces/WorkspacesExternalFileService.sys.mjs)
-  content/browser/modules/workspaces/WorkspacesIdUtils.sys.mjs             (content/modules/workspaces/WorkspacesIdUtils.sys.mjs)
-  content/browser/modules/workspaces/WorkspacesMigratorUtils.sys.mjs       (content/modules/workspaces/WorkspacesMigratorUtils.sys.mjs)
-  content/browser/modules/workspaces/WorkspacesService.sys.mjs             (content/modules/workspaces/WorkspacesService.sys.mjs)
-  content/browser/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs       (content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesDataSaver.mjs           (content/modules/workspaces/WorkspacesDataSaver.mjs)
+  content/browser/modules/workspaces/WorkspacesElementService.mjs      (content/modules/workspaces/WorkspacesElementService.mjs)
+  content/browser/modules/workspaces/WorkspacesExternalFileService.mjs (content/modules/workspaces/WorkspacesExternalFileService.mjs)
+  content/browser/modules/workspaces/WorkspacesIdUtils.mjs             (content/modules/workspaces/WorkspacesIdUtils.mjs)
+  content/browser/modules/workspaces/WorkspacesMigratorUtils.mjs       (content/modules/workspaces/WorkspacesMigratorUtils.mjs)
+  content/browser/modules/workspaces/WorkspacesService.mjs             (content/modules/workspaces/WorkspacesService.mjs)
+  content/browser/modules/workspaces/WorkspacesWindowIdUtils.mjs       (content/modules/workspaces/WorkspacesWindowIdUtils.mjs)
 
 # style sheet
   content/browser/browser-bms-window.css                       (content/browser-bms-window.css)

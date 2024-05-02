@@ -1,35 +1,19 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-var { WorkspacesMigratorUtils } = ChromeUtils.importESModule(
-  "chrome://browser/content/modules/workspaces/WorkspacesMigratorUtils.sys.mjs"
-);
-
-var {
+import { WorkspacesMigratorUtils } from "./modules/workspaces/WorkspacesMigratorUtils.mjs";
+import { WorkspacesIdUtils } from "./modules/workspaces/WorkspacesIdUtils.mjs";
+import { WorkspacesElementService } from "./modules/workspaces/WorkspacesElementService.mjs";
+import { WorkspacesWindowIdUtils } from "./modules/workspaces/WorkspacesWindowIdUtils.mjs";
+import { WorkspacesDataSaver } from "./modules/workspaces/WorkspacesDataSaver.mjs";
+import {
   WorkspacesService,
   WorkspacesReorderService,
   workspacesPreferences,
   WorkspacesWindowUuidService,
   getWorkspaceIconUrl,
-} = ChromeUtils.importESModule(
-  "chrome://browser/content/modules/workspaces/WorkspacesService.sys.mjs"
-);
+} from "./modules/workspaces/WorkspacesService.mjs";
 
-var { WorkspacesIdUtils } = ChromeUtils.importESModule(
-  "chrome://browser/content/modules/workspaces/WorkspacesIdUtils.sys.mjs"
-);
-
-var { WorkspacesElementService } = ChromeUtils.importESModule(
-  "chrome://browser/content/modules/workspaces/WorkspacesElementService.sys.mjs"
-);
-
-var { WorkspacesWindowIdUtils } = ChromeUtils.importESModule(
-  "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs"
-);
-
-var { WorkspacesDataSaver } = ChromeUtils.importESModule(
-  "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.sys.mjs"
-);
-
+/* Mozilla's ES Module. It can be impoted via ChromeUtils */
 var { CustomizableUI } = ChromeUtils.importESModule(
   "resource:///modules/CustomizableUI.sys.mjs"
 );

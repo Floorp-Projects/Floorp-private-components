@@ -1,27 +1,24 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-export const EXPORTED_SYMBOLS = ["WorkspacesIdUtils"];
+import { WorkspacesWindowIdUtils } from "./WorkspacesWindowIdUtils.mjs"
+import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs"
+import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs"
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  WorkspacesExternalFileService:
-    "chrome://browser/content/modules/workspaces/WorkspacesExternalFileService.sys.mjs",
-  WorkspacesWindowIdUtils:
-    "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs",
-  WorkspacesDataSaver: "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.sys.mjs",
   PrivateContainer: "resource:///modules/PrivateContainer.sys.mjs",
 });
 
 export const WorkspacesIdUtils = {
   async getWorkspaceByIdAndWindowId(workspaceId, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     return workspacesData[workspaceId];
   },
 
   async workspaceIdExists(workspaceId, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     return workspacesData.hasOwnProperty(workspaceId);
   },
 
@@ -55,38 +52,37 @@ export const WorkspacesIdUtils = {
 
   async removeWorkspaceById(workspaceId, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     delete workspacesData[workspaceId];
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   async removeWindowWorkspacesDataById(windowId) {
     let json = await IOUtils.readJSON(
-      lazy.WorkspacesExternalFileService._workspacesStoreFile,
+      WorkspacesExternalFileService._workspacesStoreFile,
     );
     delete json.windows[windowId];
 
     await IOUtils.writeJSON(
-      lazy.WorkspacesExternalFileService._workspacesStoreFile,
+      WorkspacesExternalFileService._workspacesStoreFile,
       json,
     );
   },
 
   async removeWindowTabsDataById(windowId) {
     let json = await IOUtils.readJSON(
-      lazy.WorkspacesExternalFileService._workspacesStoreFile,
+      WorkspacesExternalFileService._workspacesStoreFile,
     );
     let windowWorkspacesData = json.windows[windowId];
     for (let workspaceId in windowWorkspacesData) {
       let workspace = windowWorkspacesData[workspaceId];
       if (workspace.tabs) {
-        let workspace = windowWorkspacesData[workspaceId];
         workspace.tabs = [];
       }
     }
 
     await IOUtils.writeJSON(
-      lazy.WorkspacesExternalFileService._workspacesStoreFile,
+      WorkspacesExternalFileService._workspacesStoreFile,
       json,
     );
   },

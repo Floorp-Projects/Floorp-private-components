@@ -1,9 +1,10 @@
+/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
+
+import { WorkspacesWindowIdUtils } from "./WorkspacesWindowIdUtils.mjs"
+import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs"
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  WorkspacesWindowIdUtils:
-    "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs",
-  WorkspacesDataSaver: "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.sys.mjs",
   PrivateContainer: "resource:///modules/PrivateContainer.sys.mjs",
 });
 
@@ -45,17 +46,17 @@ export const WorkspacesService = {
   /**
    * Creates a new workspace.
    *
-   * @param {string} name - The name of the workspace.
+   * @param {string} workspaceName - The name of the workspace.
    * @param {number} windowId - The ID of the window.
    * @param {boolean} [defaultWorkspace=false] - Whether the workspace is the default workspace.
    * @returns {Promise<string>} A promise that resolves with the ID of the created workspace.
    */
-  async createWorkspace(name, windowId, defaultWorkspace, icon, setSelected) {
+  async createWorkspace(workspaceName, windowId, defaultWorkspace, icon, setSelected) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     let workspaceId = generateUuid();
     let workspaceData = {
-      name,
+      name: workspaceName,
       tabs: [],
       defaultWorkspace: defaultWorkspace || false,
       id:  workspaceId,
@@ -69,7 +70,7 @@ export const WorkspacesService = {
       };
     }
 
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
     return workspaceId;
   },
 
@@ -82,9 +83,9 @@ export const WorkspacesService = {
    */
   async deleteWorkspace(workspaceId, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     delete workspacesData[workspaceId];
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   /**
@@ -97,9 +98,9 @@ export const WorkspacesService = {
    */
   async renameWorkspace(workspaceId, newName, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     workspacesData[workspaceId].name = newName;
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   /**
@@ -111,11 +112,11 @@ export const WorkspacesService = {
    */
   async setDefaultWorkspace(workspaceId, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     workspacesData.preferences = {
       defaultWorkspace: workspaceId,
     };
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   /**
@@ -127,7 +128,7 @@ export const WorkspacesService = {
    */
   async setSelectWorkspace(workspaceId, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
 
     if (!workspacesData.preferences) {
       workspacesData.preferences = {};
@@ -135,7 +136,7 @@ export const WorkspacesService = {
 
     workspacesData.preferences.selectedWorkspaceId = workspaceId;
 
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   /**
@@ -154,7 +155,7 @@ export const WorkspacesService = {
     windowId,
   ) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     workspacesData[workspaceId].userContextId = userContextId;
     workspacesData[workspaceId].icon = icon;
     workspacesData[workspaceId].isPrivateContainerWorkspace = false;
@@ -165,7 +166,7 @@ export const WorkspacesService = {
       workspacesData[workspaceId].isPrivateContainerWorkspace = true;
     }
 
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   /**
@@ -178,9 +179,9 @@ export const WorkspacesService = {
    */
   async setWorkspaceIcon(workspaceId, icon, windowId) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     workspacesData[workspaceId].icon = icon;
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 
   /**
@@ -197,9 +198,9 @@ export const WorkspacesService = {
     windowId,
   ) {
     let workspacesData =
-      await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
     workspacesData[workspaceId].userContextId = userContextId;
-    await lazy.WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
+    await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
 };
 
@@ -218,7 +219,7 @@ export const WorkspacesReorderService = {
    * @param {string} windowId - The ID of the window containing the workspaces.
    */
   async reorderWorkspaceUp(workspaceId, windowId) {
-    const currentWorkspacesData = await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
+    const currentWorkspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
     const keys = Object.keys(currentWorkspacesData);
     const index = keys.indexOf(workspaceId);
 
@@ -231,7 +232,7 @@ export const WorkspacesReorderService = {
             newWorkspacesData[key] = currentWorkspacesData[key];
         });
 
-        await lazy.WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
+        await WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
     } else {
         console.error("Cannot move the first workspace before.");
     }
@@ -245,7 +246,7 @@ export const WorkspacesReorderService = {
    */
 
   async reorderWorkspaceDown(workspaceId, windowId) {
-    const currentWorkspacesData = await lazy.WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
+    const currentWorkspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
     const keys = Object.keys(currentWorkspacesData);
     const index = keys.indexOf(workspaceId);
 
@@ -257,7 +258,7 @@ export const WorkspacesReorderService = {
         keys.forEach(key => {
             newWorkspacesData[key] = currentWorkspacesData[key];
         });
-        await lazy.WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
+        await WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
     } else {
         console.error("Cannot move the first workspace after.");
     }

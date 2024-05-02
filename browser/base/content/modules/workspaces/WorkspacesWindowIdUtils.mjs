@@ -1,15 +1,10 @@
+/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-export const EXPORTED_SYMBOLS = ["WorkspacesWindowIdUtils"];
-
-const lazy = {};
-ChromeUtils.defineESModuleGetters(lazy, {
-  WorkspacesExternalFileService:
-    "chrome://browser/content/modules/workspaces/WorkspacesExternalFileService.sys.mjs",
-});
+import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs"
 
 export const WorkspacesWindowIdUtils = {
   get _workspacesStoreFile() {
-    return lazy.WorkspacesExternalFileService._workspacesStoreFile;
+    return WorkspacesExternalFileService._workspacesStoreFile;
   },
 
   async getAllWindowAndWorkspacesData() {

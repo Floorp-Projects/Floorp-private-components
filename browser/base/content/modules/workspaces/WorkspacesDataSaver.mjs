@@ -1,8 +1,11 @@
+/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
+
+import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs"
+
 /**
  * @description Overview This file contains the implementation of the WorkspacesDataSaver module.
  * @module WorkspacesDataSaver
  */
-
 
 /**
  * The exported symbols from this module.
@@ -10,12 +13,6 @@
  * @type {Array<string>}
  */
 export const EXPORTED_SYMBOLS = ["WorkspacesDataSaver"];
-
-const lazy = {};
-ChromeUtils.defineESModuleGetters(lazy, {
-  WorkspacesExternalFileService:
-    "chrome://browser/content/modules/workspaces/WorkspacesExternalFileService.sys.mjs",
-});
 
 /**
  * The WorkspacesDataSaver module.
@@ -29,7 +26,7 @@ export const WorkspacesDataSaver = {
    * @type {string}
    */
   get _workspacesStoreFile() {
-    return lazy.WorkspacesExternalFileService._workspacesStoreFile;
+    return WorkspacesExternalFileService._workspacesStoreFile;
   },
 
   /**

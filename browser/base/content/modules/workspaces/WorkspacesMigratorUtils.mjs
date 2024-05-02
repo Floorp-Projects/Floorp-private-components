@@ -1,12 +1,7 @@
+/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-export const EXPORTED_SYMBOLS = ["WorkspacesMigratorUtils"];
-
-const lazy = {};
-
-ChromeUtils.defineESModuleGetters(lazy, {
-  WorkspacesService: "chrome://browser/content/modules/workspaces/WorkspacesService.sys.mjs",
-  WorkspacesIdUtils: "chrome://browser/content/modules/workspaces/WorkspacesIdUtils.sys.mjs",
-});
+import { WorkspacesIdUtils } from "./WorkspacesIdUtils.mjs"
+import { WorkspacesService } from "./WorkspacesService.mjs"
 
 function getIconNameByWorkspaceName(workspaceName) {
   const settings = JSON.parse(
@@ -27,7 +22,7 @@ function getIconNameByWorkspaceName(workspaceName) {
   return result;
 }
 
-function checkWorkspaceInfoExist(name) {
+function checkWorkspaceInfoExist(workspaceName) {
   const data = JSON.parse(
     Services.prefs.getStringPref("floorp.browser.workspace.info"),
   );
@@ -36,7 +31,7 @@ function checkWorkspaceInfoExist(name) {
     const keys = Object.keys(obj);
     const workspaceValue = keys[0];
 
-    if (workspaceValue == name) {
+    if (workspaceValue == workspaceName) {
       // return workspaceValue;
       return i;
     }
@@ -121,28 +116,28 @@ export const WorkspacesMigratorUtils = {
     const allWorkspacesName = this.LegacyWorkspacesAllNamesPref;
 
     // Create Workspace with legacy workspace name
-    for (const name of allWorkspacesName) {
-      const workspaceId = await lazy.WorkspacesService.createWorkspace(
-        name,
+    for (const workspaceName of allWorkspacesName) {
+      const workspaceId = await WorkspacesService.createWorkspace(
+        workspaceName,
         windowId,
-        this.legacyDefaultWorkspace === name,
+        this.legacyDefaultWorkspace === workspaceName,
       );
 
       const workspace =
-        await lazy.WorkspacesIdUtils.getWorkspaceByIdAndWindowId(
+        await WorkspacesIdUtils.getWorkspaceByIdAndWindowId(
           workspaceId,
           windowId,
         );
 
-      if (this.legacySelectedWorkspace === name) {
-        await lazy.WorkspacesService.setSelectWorkspace(workspace.id, windowId);
+      if (this.legacySelectedWorkspace === workspaceName) {
+        await WorkspacesService.setSelectWorkspace(workspace.id, windowId);
       }
 
       // Workspace Container & icon
-      const userContextId = getWorkspaceUserContextId(name);
-      const iconName = getIconNameByWorkspaceName(name);
+      const userContextId = getWorkspaceUserContextId(workspaceName);
+      const iconName = getIconNameByWorkspaceName(workspaceName);
       if (iconName || userContextId) {
-        await lazy.WorkspacesService.setWorkspaceContainerUserContextIdAndIcon(
+        await WorkspacesService.setWorkspaceContainerUserContextIdAndIcon(
           workspace.id,
           userContextId || 0,
           iconName || "fingerprint",
@@ -152,9 +147,9 @@ export const WorkspacesMigratorUtils = {
 
       // Add Tabs to Workspace
       for (const tab of tabs) {
-        if (tab.getAttribute("floorpWorkspace") === name) {
+        if (tab.getAttribute("floorpWorkspace") === workspaceName) {
           tab.setAttribute(
-            lazy.WorkspacesService.workspacesTabAttributionId,
+            WorkspacesService.workspacesTabAttributionId,
             workspace.id,
           );
         }
