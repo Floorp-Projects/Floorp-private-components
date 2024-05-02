@@ -6,5 +6,4 @@ DIRS += [
     "csk",
     "floorp-search",
     "search",
-    "workspaces",
 ]

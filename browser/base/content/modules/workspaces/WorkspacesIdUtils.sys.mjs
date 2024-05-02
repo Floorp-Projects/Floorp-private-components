@@ -5,10 +5,10 @@ export const EXPORTED_SYMBOLS = ["WorkspacesIdUtils"];
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   WorkspacesExternalFileService:
-    "resource:///modules/WorkspacesExternalFileService.sys.mjs",
+    "chrome://browser/content/modules/workspaces/WorkspacesExternalFileService.sys.mjs",
   WorkspacesWindowIdUtils:
-    "resource:///modules/WorkspacesWindowIdUtils.sys.mjs",
-  WorkspacesDataSaver: "resource:///modules/WorkspacesDataSaver.sys.mjs",
+    "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs",
+  WorkspacesDataSaver: "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.sys.mjs",
   PrivateContainer: "resource:///modules/PrivateContainer.sys.mjs",
 });
 

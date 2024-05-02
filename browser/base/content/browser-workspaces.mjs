@@ -1,7 +1,7 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
 var { WorkspacesMigratorUtils } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesMigratorUtils.sys.mjs"
+  "chrome://browser/content/modules/workspaces/WorkspacesMigratorUtils.sys.mjs"
 );
 
 var {
@@ -10,22 +10,24 @@ var {
   workspacesPreferences,
   WorkspacesWindowUuidService,
   getWorkspaceIconUrl,
-} = ChromeUtils.importESModule("resource:///modules/WorkspacesService.sys.mjs");
+} = ChromeUtils.importESModule(
+  "chrome://browser/content/modules/workspaces/WorkspacesService.sys.mjs"
+);
 
 var { WorkspacesIdUtils } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesIdUtils.sys.mjs"
+  "chrome://browser/content/modules/workspaces/WorkspacesIdUtils.sys.mjs"
 );
 
 var { WorkspacesElementService } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesElementService.sys.mjs"
+  "chrome://browser/content/modules/workspaces/WorkspacesElementService.sys.mjs"
 );
 
 var { WorkspacesWindowIdUtils } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesWindowIdUtils.sys.mjs"
+  "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs"
 );
 
 var { WorkspacesDataSaver } = ChromeUtils.importESModule(
-  "resource:///modules/WorkspacesDataSaver.sys.mjs"
+  "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.sys.mjs"
 );
 
 var { CustomizableUI } = ChromeUtils.importESModule(
@@ -1369,14 +1371,6 @@ export var gWorkspaces = {
   },
 };
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-    window.SessionStore.promiseAllWindowsRestored.then(() => {
-      window.setTimeout(() => {
-        gWorkspaces.init();
-      }, 1000);
-    });
-  },
-  { once: true }
-);
+window.setTimeout(() => {
+  gWorkspaces.init();
+}, 1000);

@@ -2,11 +2,23 @@
 browser.jar:
 %  content browser %content/browser/ contentaccessible=yes
 
+# ES modules (Content scripts)
+  content/browser/browser-bms-window.mjs                        (content/browser-bms-window.mjs)
+  content/browser/browser-custom-keyboard-shortcut.mjs          (content/browser-custom-keyboard-shortcut.mjs)
+  content/browser/browser-favicon-color.mjs                     (content/browser-favicon-color.mjs)
+  content/browser/browser-splitView.mjs                         (content/browser-splitView.mjs)
+  content/browser/browser-statusbar.mjs                         (content/browser-statusbar.mjs)
+  content/browser/browser-UI-customizing-menu.mjs               (content/browser-UI-customizing-menu.mjs)
+  content/browser/browser-workspaces.mjs                        (content/browser-workspaces.mjs)
+
+# ES Modules (Not used directly modules)
+  content/browser/modules/workspaces/WorkspacesDataSaver.sys.mjs           (content/modules/workspaces/WorkspacesDataSaver.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesElementService.sys.mjs      (content/modules/workspaces/WorkspacesElementService.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesExternalFileService.sys.mjs (content/modules/workspaces/WorkspacesExternalFileService.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesIdUtils.sys.mjs             (content/modules/workspaces/WorkspacesIdUtils.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesMigratorUtils.sys.mjs       (content/modules/workspaces/WorkspacesMigratorUtils.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesService.sys.mjs             (content/modules/workspaces/WorkspacesService.sys.mjs)
+  content/browser/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs       (content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs)
+
+# style sheet
   content/browser/browser-bms-window.css                       (content/browser-bms-window.css)
-  content/browser/browser-bms-window.mjs                       (content/browser-bms-window.mjs)
-  content/browser/browser-custom-keyboard-shortcut.mjs         (content/browser-custom-keyboard-shortcut.mjs)
-  content/browser/browser-favicon-color.mjs                    (content/browser-favicon-color.mjs)
-  content/browser/browser-splitView.mjs                        (content/browser-splitView.mjs)
-  content/browser/browser-statusbar.mjs                        (content/browser-statusbar.mjs)
-  content/browser/browser-UI-customizing-menu.mjs              (content/browser-UI-customizing-menu.mjs)
-  content/browser/browser-workspaces.mjs                       (content/browser-workspaces.mjs)

@@ -14,7 +14,7 @@ export const EXPORTED_SYMBOLS = ["WorkspacesDataSaver"];
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   WorkspacesExternalFileService:
-    "resource:///modules/WorkspacesExternalFileService.sys.mjs",
+    "chrome://browser/content/modules/workspaces/WorkspacesExternalFileService.sys.mjs",
 });
 
 /**

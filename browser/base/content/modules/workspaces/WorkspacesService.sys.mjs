@@ -2,8 +2,8 @@
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   WorkspacesWindowIdUtils:
-    "resource:///modules/WorkspacesWindowIdUtils.sys.mjs",
-  WorkspacesDataSaver: "resource:///modules/WorkspacesDataSaver.sys.mjs",
+    "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.sys.mjs",
+  WorkspacesDataSaver: "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.sys.mjs",
   PrivateContainer: "resource:///modules/PrivateContainer.sys.mjs",
 });
 

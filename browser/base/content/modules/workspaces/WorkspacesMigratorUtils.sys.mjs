@@ -4,8 +4,8 @@ export const EXPORTED_SYMBOLS = ["WorkspacesMigratorUtils"];
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
-  WorkspacesService: "resource:///modules/WorkspacesService.sys.mjs",
-  WorkspacesIdUtils: "resource:///modules/WorkspacesIdUtils.sys.mjs",
+  WorkspacesService: "chrome://browser/content/modules/workspaces/WorkspacesService.sys.mjs",
+  WorkspacesIdUtils: "chrome://browser/content/modules/workspaces/WorkspacesIdUtils.sys.mjs",
 });
 
 function getIconNameByWorkspaceName(workspaceName) {

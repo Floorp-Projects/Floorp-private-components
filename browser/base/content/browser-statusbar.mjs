@@ -2,6 +2,33 @@
 
 export const gFloorpStatusBar = {
   initialized: false,
+  elements: {
+    statusbar: window.MozXULElement.parseXULToFragment(
+      `<toolbar id="statusBar" toolbarname="Status bar" customizable="true" style="border-top: 1px solid var(--chrome-content-separator-color)"
+                 class="browser-toolbar customization-target" mode="icons" context="toolbar-context-menu" accesskey="A">
+                 <hbox id="status-text" align="center" flex="1" class="statusbar-padding"/>
+        </toolbar>
+      `,
+    )
+  },
+
+  CSS: {
+    hideedStatusBar: `
+      #statusBar {
+        display: none;
+      }
+
+      :root[customizing] #statusBar {
+        display: inherit !important;
+      }
+    `,
+    displayStatusbar: `
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    `,
+  },
+
   init() {
     document.getElementById("navigator-toolbox").appendChild(this.elements.statusbar);
     window.CustomizableUI.registerArea("statusBar", {
@@ -31,33 +58,6 @@ export const gFloorpStatusBar = {
     this.toggleStatusBar();
     Services.prefs.addObserver("browser.display.statusbar", this.handlePrefChange);
     this.observeStatusbar();
-  },
-
-  elements: {
-    statusbar: window.MozXULElement.parseXULToFragment(
-      `<toolbar id="statusBar" toolbarname="Status bar" customizable="true" style="border-top: 1px solid var(--chrome-content-separator-color)"
-                 class="browser-toolbar customization-target" mode="icons" context="toolbar-context-menu" accesskey="A">
-                 <hbox id="status-text" align="center" flex="1" class="statusbar-padding"/>
-        </toolbar>
-      `,
-    )
-  },
-
-  CSS: {
-    hideedStatusBar: `
-      #statusBar {
-        display: none;
-      }
-     
-      :root[customizing] #statusBar {
-        display: inherit !important;
-      }
-    `,
-    displayStatusbar: `
-      background: none !important;
-      border: none !important;
-      box-shadow: none !important;
-    `,
   },
 
   changeStatusbarVisibility() {

@@ -4,7 +4,7 @@ export const EXPORTED_SYMBOLS = ["WorkspacesWindowIdUtils"];
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   WorkspacesExternalFileService:
-    "resource:///modules/WorkspacesExternalFileService.sys.mjs",
+    "chrome://browser/content/modules/workspaces/WorkspacesExternalFileService.sys.mjs",
 });
 
 export const WorkspacesWindowIdUtils = {
