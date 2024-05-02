@@ -1,6 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { BrowserManagerSidebar } from "resource:///modules/BrowserManagerSidebar.sys.mjs";
+import { BrowserManagerSidebar } from "chrome://browser/content/modules/bms/BrowserManagerSidebar.mjs";
 
 export const EXPORTED_SYMBOLS = ["BrowserManagerSidebarPanelWindowUtils"];
 
@@ -8,7 +8,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
     get STATIC_SIDEBAR_DATA() {
         return BrowserManagerSidebar.STATIC_SIDEBAR_DATA;
       },
-    
+
     get BROWSER_SIDEBAR_DATA() {
       return JSON.parse(
         Services.prefs.getStringPref("floorp.browser.sidebar2.data", undefined)
@@ -26,7 +26,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         return webpanelBrowser.browsingContext.associatedWindow;
     },
 
-    toggleMutePanel(window, webpanelId, isParentWindow) {
+    toggleMutePanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
@@ -49,13 +49,13 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         }
     },
 
-    reloadPanel(window, webpanelId, isParentWindow) {
+    reloadPanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
-            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, window);
+            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, aWindow);
         } else {
-            targetPanelWindow = window;
+            targetPanelWindow = aWindow;
         }
 
         if (!targetPanelWindow) {
@@ -66,13 +66,13 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         tab.linkedBrowser.reload();
     },
 
-    goForwardPanel(window, webpanelId, isParentWindow) {
+    goForwardPanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
-            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, window);
+            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, aWindow);
         } else {
-            targetPanelWindow = window;
+            targetPanelWindow = aWindow;
         }
 
         if (!targetPanelWindow) {
@@ -83,13 +83,13 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         tab.linkedBrowser.goForward();
     },
 
-    goBackPanel(window, webpanelId, isParentWindow) {
+    goBackPanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
-            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, window);
+            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, aWindow);
         } else {
-            targetPanelWindow = window;
+            targetPanelWindow = aWindow;
         }
 
         if (!targetPanelWindow) {
@@ -100,13 +100,13 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         tab.linkedBrowser.goBack();
     },
 
-    goIndexPagePanel(window, webpanelId, isParentWindow) {
+    goIndexPagePanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
-            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, window);
+            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, aWindow);
         } else {
-            targetPanelWindow = window;
+            targetPanelWindow = aWindow;
         }
 
         if (!targetPanelWindow) {
@@ -120,13 +120,13 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         });
     },
 
-    reopenInSelectContainer(window, webpanelId, userContextId, isParentWindow) {
+    reopenInSelectContainer(aWindow, webpanelId, userContextId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
-            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, window);
+            targetPanelWindow = this.getWindowByWebpanelId(webpanelId, aWindow);
         } else {
-            targetPanelWindow = window;
+            targetPanelWindow = aWindow;
         }
 
         if (!targetPanelWindow) {
@@ -167,7 +167,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         Services.prefs.setStringPref("floorp.browser.sidebar2.data", JSON.stringify(currentBSMData));
     },
 
-    zoomInPanel(window, webpanelId, isParentWindow) {
+    zoomInPanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
@@ -186,7 +186,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         this.saveZoomLevel(webpanelId, zoomLevel);
     },
 
-    zoomOutPanel(window, webpanelId, isParentWindow) {
+    zoomOutPanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {
@@ -205,7 +205,7 @@ export const BrowserManagerSidebarPanelWindowUtils = {
         this.saveZoomLevel(webpanelId, zoomLevel);
     },
 
-    resetZoomPanel(window, webpanelId, isParentWindow) {
+    resetZoomPanel(aWindow, webpanelId, isParentWindow) {
         let targetPanelWindow = null;
 
         if (isParentWindow) {

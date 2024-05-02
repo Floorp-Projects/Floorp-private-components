@@ -1,20 +1,24 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-const CustomKeyboardShortcutUtils = ChromeUtils.importESModule(
-  "resource:///modules/CustomKeyboardShortcutUtils.sys.mjs",
-);
+import {
+  SHORTCUT_KEY_AND_ACTION_PREF,
+  SHORTCUT_KEY_AND_ACTION_ENABLED_PREF,
+  SHORTCUT_KEY_DISABLE_FX_DEFAULT_SCKEY_PREF,
+  SHORTCUT_KEY_CHANGED_ARRAY_PREF,
+  keyboradShortcutActions,
+} from "./modules/csk/CustomKeyboardShortcutUtils.mjs"
 
 /** Floorp's custom functions used for custom actions */
 export const gFloorpCustomActionFunctions = {
   evalCustomeActionWithNum(num) {
     let action = Services.prefs.getStringPref(
-      `floorp.custom.shortcutkeysAndActions.customAction${num}`,
+      `floorp.custom.shortcutkeysAndActions.customAction${num}`
     );
     Function(action)();
   },
 };
 
-/** 
+/**
  * Floorp's custom functions used for CSK
  * If you need add actions for CSK, you can add it here.
  */
@@ -28,25 +32,27 @@ export const gFloorpCSKActionFunctions = {
       window.setTimeout(() => {
         window.focus();
       }, 500);
-    }
-  }
-}
+    },
+  },
+};
 
 export const gFloorpCustomShortcutKeys = {
   init() {
-    let webPanelId = new URL(window.location.href).searchParams.get("floorpWebPanelId");
+    let webPanelId = new URL(window.location.href).searchParams.get(
+      "floorpWebPanelId"
+    );
     if (webPanelId) {
-        return;
+      return;
     }
 
     Services.prefs.clearUserPref(
-      CustomKeyboardShortcutUtils.SHORTCUT_KEY_CHANGED_ARRAY_PREF,
+      SHORTCUT_KEY_CHANGED_ARRAY_PREF
     );
 
     if (
       Services.prefs.getBoolPref(
-        CustomKeyboardShortcutUtils.SHORTCUT_KEY_DISABLE_FX_DEFAULT_SCKEY_PREF,
-        false,
+        SHORTCUT_KEY_DISABLE_FX_DEFAULT_SCKEY_PREF,
+        false
       )
     ) {
       window.SessionStore.promiseInitialized.then(() => {
@@ -57,14 +63,14 @@ export const gFloorpCustomShortcutKeys = {
 
     const keyboradShortcutConfig = JSON.parse(
       Services.prefs.getStringPref(
-        CustomKeyboardShortcutUtils.SHORTCUT_KEY_AND_ACTION_PREF,
-        "",
-      ),
+        SHORTCUT_KEY_AND_ACTION_PREF,
+        ""
+      )
     );
 
     if (
       keyboradShortcutConfig.length === 0 &&
-      CustomKeyboardShortcutUtils.SHORTCUT_KEY_AND_ACTION_ENABLED_PREF
+      SHORTCUT_KEY_AND_ACTION_ENABLED_PREF
     ) {
       return;
     }
@@ -80,7 +86,7 @@ export const gFloorpCustomShortcutKeys = {
           actionName,
           key,
           keyCode,
-          modifiers,
+          modifiers
         );
       } else {
         console.error("Invalid shortcut key config: " + shortcutObj);
@@ -90,12 +96,13 @@ export const gFloorpCustomShortcutKeys = {
 
   buildShortCutkeyFunction(actionName, key, keyCode, modifiers) {
     let functionName =
-      CustomKeyboardShortcutUtils.keyboradShortcutActions[actionName];
+      keyboradShortcutActions[actionName];
     if (!functionName) {
       return;
     }
 
-    const functionCode = CustomKeyboardShortcutUtils.keyboradShortcutActions[actionName][0];
+    const functionCode =
+      keyboradShortcutActions[actionName][0];
 
     // Remove " " from modifiers.
     modifiers = modifiers.replace(/ /g, "");

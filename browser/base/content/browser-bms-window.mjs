@@ -1,8 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-var { BrowserManagerSidebarPanelWindowUtils } = ChromeUtils.importESModule(
-  "resource:///modules/BrowserManagerSidebarPanelWindowUtils.sys.mjs"
-);
+import { BrowserManagerSidebarPanelWindowUtils } from "./modules/bms/BrowserManagerSidebarPanelWindowUtils.mjs";
 
 export var gBmsWindow = {
   _initialized: false,

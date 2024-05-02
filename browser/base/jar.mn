@@ -12,13 +12,15 @@ browser.jar:
   content/browser/browser-workspaces.mjs                        (content/browser-workspaces.mjs)
 
 # ES Modules (Not used directly modules)
-  content/browser/modules/workspaces/WorkspacesDataSaver.mjs           (content/modules/workspaces/WorkspacesDataSaver.mjs)
-  content/browser/modules/workspaces/WorkspacesElementService.mjs      (content/modules/workspaces/WorkspacesElementService.mjs)
-  content/browser/modules/workspaces/WorkspacesExternalFileService.mjs (content/modules/workspaces/WorkspacesExternalFileService.mjs)
-  content/browser/modules/workspaces/WorkspacesIdUtils.mjs             (content/modules/workspaces/WorkspacesIdUtils.mjs)
-  content/browser/modules/workspaces/WorkspacesMigratorUtils.mjs       (content/modules/workspaces/WorkspacesMigratorUtils.mjs)
-  content/browser/modules/workspaces/WorkspacesService.mjs             (content/modules/workspaces/WorkspacesService.mjs)
-  content/browser/modules/workspaces/WorkspacesWindowIdUtils.mjs       (content/modules/workspaces/WorkspacesWindowIdUtils.mjs)
+  content/browser/modules/bms/BrowserManagerSidebarPanelWindowUtils.mjs (content/modules/bms/BrowserManagerSidebarPanelWindowUtils.mjs)
+  content/browser/modules/csk/CustomKeyboardShortcutUtils.mjs           (content/modules/csk/CustomKeyboardShortcutUtils.mjs)
+  content/browser/modules/workspaces/WorkspacesDataSaver.mjs            (content/modules/workspaces/WorkspacesDataSaver.mjs)
+  content/browser/modules/workspaces/WorkspacesElementService.mjs       (content/modules/workspaces/WorkspacesElementService.mjs)
+  content/browser/modules/workspaces/WorkspacesExternalFileService.mjs  (content/modules/workspaces/WorkspacesExternalFileService.mjs)
+  content/browser/modules/workspaces/WorkspacesIdUtils.mjs              (content/modules/workspaces/WorkspacesIdUtils.mjs)
+  content/browser/modules/workspaces/WorkspacesMigratorUtils.mjs        (content/modules/workspaces/WorkspacesMigratorUtils.mjs)
+  content/browser/modules/workspaces/WorkspacesService.mjs              (content/modules/workspaces/WorkspacesService.mjs)
+  content/browser/modules/workspaces/WorkspacesWindowIdUtils.mjs        (content/modules/workspaces/WorkspacesWindowIdUtils.mjs)
 
 # style sheet
   content/browser/browser-bms-window.css                       (content/browser-bms-window.css)

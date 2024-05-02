@@ -2,8 +2,6 @@
 # vim: set filetype=python:
 
 DIRS += [
-    "bms",
-    "csk",
     "floorp-search",
     "search",
 ]

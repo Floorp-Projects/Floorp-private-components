@@ -11,8 +11,8 @@
  *  @module CustomKeyboardShortcutUtils
  *
  *  @example Importing the module
- *  import { CustomKeyboardShortcutUtils } from "resource:///modules/CustomKeyboardShortcutUtils.sys.mjs";
- *  const CustomKeyboardShortcutUtils = ChromeUtils.importESModule("resource:///modules/CustomKeyboardShortcutUtils.sys.mjs");
+ *  import { CustomKeyboardShortcutUtils } from "chrome://browser/content/modules/csk/CustomKeyboardShortcutUtils.mjs";
+ *  const CustomKeyboardShortcutUtils = ChromeUtils.importESModule("chrome://browser/content/modules/csk/CustomKeyboardShortcutUtils.mjs");
  *
  *  @example Getting all actions of a type
  *  const allActionType = CustomKeyboardShortcutUtils.keyboradShortcutFunctions.getInfoFunctions.getAllActionType();
@@ -20,20 +20,19 @@
  *  Codes output: ["tab-action", "page-action", "visible-action", "history-action", "search-action", "tools-action", "pip-action", "bookmark-action", "open-page-action", "history-action", "downloads-action", "sidebar-action", "bms-action"]
  *
  *
- * @typedef {object} ShortcutAction
+ * @typedef {object} keyboradShortcutActions
  * @property {string} code - The code that will be executed when the action is triggered.
  * @property {string} localizationKey - A string used for Fluent localization.
  * @property {string} type - The type of action, which can be used to filter actions or get all actions of a type.
  *
- * @typedef {object} KeyboardShortcutActions
+ * @typedef {object} keyboradShortcutFunctions
  * @typedef {object} CustomKeyboardShortcutUtils
  * @property {string[]} EXPORTED_SYMBOLS - The exported symbols of the module.
  * @property {string} SHORTCUT_KEY_AND_ACTION_PREF - The preference key used to store the keyboard shortcuts and actions.
  * @property {string} SHORTCUT_KEY_AND_ACTION_ENABLED_PREF - The preference key used to store whether the keyboard shortcuts and actions are enabled.
- * @property {KeyboardShortcutActions} keyboradShortcutActions - The object containing all the keyboard shortcut actions.
+ * @property {keyboradShortcutFunctions} keyboradShortcutActions - The object containing all the keyboard shortcut actions.
  */
 
-export const EXPORTED_SYMBOLS = ["CustomKeyboardShortcutUtils"];
 export const SHORTCUT_KEY_AND_ACTION_PREF =
   "floorp.custom.shortcutkeysAndActions";
 export const SHORTCUT_KEY_AND_ACTION_ENABLED_PREF =
@@ -414,9 +413,9 @@ export const keyboradShortcutFunctions = {
 
     // Not recommended to use
     getKeyIsModifier(key, keyCode) {
-      let modifiersList =
+      let modifiersArray =
         keyboradShortcutFunctions.modifiersListFunctions.getModifiersList();
-      return modifiersList.includes(key) || modifiersList.includes(keyCode);
+      return modifiersArray.includes(key) || modifiersArray.includes(keyCode);
     },
 
     // Not recommended to use
