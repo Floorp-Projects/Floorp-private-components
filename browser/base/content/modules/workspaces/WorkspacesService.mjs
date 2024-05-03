@@ -5,7 +5,7 @@ import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs"
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  PrivateContainer: "resource:///modules/PrivateContainer.sys.mjs",
+  PrivateContainer: "chrome://browser/content/modules/private-container/PrivateContainer.mjs",
 });
 
 function generateUuid() {

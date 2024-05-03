@@ -119,7 +119,7 @@ var { CustomizableUI } = ChromeUtils.importESModule(
  * @property {Function} init - Initializes the workspaces feature.
  *
  */
-export var gWorkspaces = {
+export const gWorkspaces = {
   _initialized: false,
   _currentWorkspaceId: null,
   _popuppanelNotFound: false,

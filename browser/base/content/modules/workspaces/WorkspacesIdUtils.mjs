@@ -6,7 +6,7 @@ import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.m
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  PrivateContainer: "resource:///modules/PrivateContainer.sys.mjs",
+  PrivateContainer: "chrome://browser/content/modules/private-container/PrivateContainer.mjs",
 });
 
 export const WorkspacesIdUtils = {
