@@ -13,6 +13,8 @@ import {
   getWorkspaceIconUrl,
 } from "./modules/workspaces/WorkspacesService.mjs";
 
+import { gFloorpContextMenu } from "chrome://browser/content/browser-context-menu.mjs";
+
 /* Mozilla's ES Module. It can be impoted via ChromeUtils */
 var { CustomizableUI } = ChromeUtils.importESModule(
   "resource:///modules/CustomizableUI.sys.mjs"
@@ -1094,6 +1096,14 @@ export const gWorkspaces = {
     if (this._initialized) {
       return;
     }
+
+    // Add toolbar popup for context menu
+    gFloorpContextMenu.addToolbarContentMenuPopupSet(
+      `<popupset>
+        <menupopup id="workspaces-toolbar-item-context-menu" onpopupshowing="gWorkspaces.contextMenu.createWorkspacesContextMenuItems(event);" />
+      </popupset>
+      `
+    );
 
     if (
       Services.prefs.getBoolPref(workspacesPreferences.WORKSPACES_ENABLED_PREF)
