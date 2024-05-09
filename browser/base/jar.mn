@@ -19,7 +19,6 @@ browser.jar:
   content/browser/modules/workspaces/WorkspacesExternalFileService.mjs  (content/modules/workspaces/WorkspacesExternalFileService.mjs)
   content/browser/modules/workspaces/WorkspacesIdUtils.mjs              (content/modules/workspaces/WorkspacesIdUtils.mjs)
   content/browser/modules/workspaces/WorkspacesMigratorUtils.mjs        (content/modules/workspaces/WorkspacesMigratorUtils.mjs)
-  content/browser/modules/workspaces/WorkspacesService.mjs              (content/modules/workspaces/WorkspacesService.mjs)
   content/browser/modules/workspaces/WorkspacesWindowIdUtils.mjs        (content/modules/workspaces/WorkspacesWindowIdUtils.mjs)
 
 # style sheet

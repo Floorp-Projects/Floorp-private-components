@@ -1083,7 +1083,7 @@ export const gWorkspaces = {
       },
     });
     if (
-      ChromeUtils.importESModule("resource:///modules/FloorpStartup.sys.mjs")
+      ChromeUtils.importESModule("resource://floorp/FloorpStartup.sys.mjs")
         .isFirstRun
     ) {
       CustomizableUI.addWidgetToArea(widgetId, CustomizableUI.AREA_TABSTRIP);

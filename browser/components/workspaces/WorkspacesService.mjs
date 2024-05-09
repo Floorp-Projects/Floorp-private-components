@@ -1,7 +1,7 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesWindowIdUtils } from "./WorkspacesWindowIdUtils.mjs"
-import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs"
+import { WorkspacesWindowIdUtils } from "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.mjs"
+import { WorkspacesDataSaver } from "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.mjs"
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {

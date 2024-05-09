@@ -1,0 +1,5 @@
+
+floorp.jar:
+% resource floorp %resource/floorp/
+
+  resource/floorp/WorkspacesService.mjs
