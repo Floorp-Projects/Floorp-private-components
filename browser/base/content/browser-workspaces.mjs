@@ -11,7 +11,7 @@ import {
   workspacesPreferences,
   WorkspacesWindowUuidService,
   getWorkspaceIconUrl,
-} from "./modules/workspaces/WorkspacesService.mjs";
+} from "resource://floorp/WorkspacesService.mjs";
 
 import { gFloorpContextMenu } from "chrome://browser/content/browser-context-menu.mjs";
 

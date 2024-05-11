@@ -1,7 +1,7 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
 import { WorkspacesIdUtils } from "./WorkspacesIdUtils.mjs"
-import { WorkspacesService } from "./WorkspacesService.mjs"
+import { WorkspacesService } from "resource://floorp/WorkspacesService.mjs"
 
 function getIconNameByWorkspaceName(workspaceName) {
   const settings = JSON.parse(
