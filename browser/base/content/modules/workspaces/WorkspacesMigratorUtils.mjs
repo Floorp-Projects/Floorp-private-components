@@ -17,7 +17,7 @@ function getIconNameByWorkspaceName(workspaceName) {
     return null;
   }
   let iconURL = settings[targetWorkspaceNumber][workspaceName].icon;
-  let removeSVG = iconURL.replace("chrome://browser/skin/workspace-icons/", "");
+  let removeSVG = iconURL.replace("chrome://floorp/skin/workspace-icons/", "");
   let result = removeSVG.replace(".svg", "");
   return result;
 }

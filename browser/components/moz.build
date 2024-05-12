@@ -3,6 +3,5 @@
 
 DIRS += [
     "floorp-search",
-    "search",
     "workspaces",
 ]

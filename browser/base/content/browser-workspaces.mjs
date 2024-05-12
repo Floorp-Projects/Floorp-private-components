@@ -13,7 +13,7 @@ import {
   getWorkspaceIconUrl,
 } from "resource://floorp/WorkspacesService.mjs";
 
-import { gFloorpContextMenu } from "chrome://browser/content/browser-context-menu.mjs";
+import { gFloorpContextMenu } from "chrome://floorp/content/browser-context-menu.mjs";
 
 /* Mozilla's ES Module. It can be impoted via ChromeUtils */
 var { CustomizableUI } = ChromeUtils.importESModule(
@@ -846,19 +846,19 @@ export const gWorkspaces = {
     let object = { workspaceId };
     if (
       parentWindow?.document.documentURI ==
-      "chrome://browser/content/hiddenWindowMac.xhtml"
+      "chrome://floorp/content/hiddenWindowMac.xhtml"
     ) {
       parentWindow = null;
     }
     if (parentWindow?.gDialogBox) {
       parentWindow.gDialogBox.open(
-        "chrome://browser/content/preferences/dialogs/manageWorkspace.xhtml",
+        "chrome://floorp/content/preferences/dialogs/manageWorkspace.xhtml",
         object
       );
     } else {
       Services.ww.openWindow(
         parentWindow,
-        "chrome://browser/content/preferences/dialogs/manageWorkspace.xhtml",
+        "chrome://floorp/content/preferences/dialogs/manageWorkspace.xhtml",
         null,
         "chrome,titlebar,dialog,centerscreen,modal",
         object

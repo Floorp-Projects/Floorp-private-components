@@ -104,7 +104,7 @@ export var gBmsWindow = {
 
     const BMSSyleElement = document.createElement("style");
     BMSSyleElement.textContent = `
-           @import url("chrome://browser/content/browser-bms-window.css");
+           @import url("chrome://floorp/content/browser-bms-window.css");
         `;
     document.head.appendChild(BMSSyleElement);
 

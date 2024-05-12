@@ -11,8 +11,8 @@
  *  @module CustomKeyboardShortcutUtils
  *
  *  @example Importing the module
- *  import { CustomKeyboardShortcutUtils } from "chrome://browser/content/modules/csk/CustomKeyboardShortcutUtils.mjs";
- *  const CustomKeyboardShortcutUtils = ChromeUtils.importESModule("chrome://browser/content/modules/csk/CustomKeyboardShortcutUtils.mjs");
+ *  import { CustomKeyboardShortcutUtils } from "chrome://floorp/content/modules/csk/CustomKeyboardShortcutUtils.mjs";
+ *  const CustomKeyboardShortcutUtils = ChromeUtils.importESModule("chrome://floorp/content/modules/csk/CustomKeyboardShortcutUtils.mjs");
  *
  *  @example Getting all actions of a type
  *  const allActionType = CustomKeyboardShortcutUtils.keyboradShortcutFunctions.getInfoFunctions.getAllActionType();
@@ -455,19 +455,19 @@ export const keyboradShortcutFunctions = {
 
     if (
       parentWindow?.document.documentURI ==
-      "chrome://browser/content/hiddenWindowMac.xhtml"
+      "chrome://floorp/content/hiddenWindowMac.xhtml"
     ) {
       parentWindow = null;
     }
     if (parentWindow?.gDialogBox) {
       parentWindow.gDialogBox.open(
-        "chrome://browser/content/preferences/dialogs/manage-keyboard-shortcut.xhtml",
+        "chrome://floorp/content/preferences/dialogs/manage-keyboard-shortcut.xhtml",
         object,
       );
     } else {
       Services.ww.openWindow(
         parentWindow,
-        "chrome://browser/content/preferences/dialogs/manage-keyboard-shortcut.xhtml",
+        "chrome://floorp/content/preferences/dialogs/manage-keyboard-shortcut.xhtml",
         null,
         "chrome,titlebar,dialog,centerscreen,modal",
         object,

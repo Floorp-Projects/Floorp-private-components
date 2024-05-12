@@ -1,6 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { BrowserManagerSidebar } from "chrome://browser/content/modules/bms/BrowserManagerSidebar.mjs";
+import { BrowserManagerSidebar } from "chrome://floorp/content/modules/bms/BrowserManagerSidebar.mjs";
 
 export const EXPORTED_SYMBOLS = ["BrowserManagerSidebarPanelWindowUtils"];
 

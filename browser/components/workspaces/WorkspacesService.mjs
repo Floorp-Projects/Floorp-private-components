@@ -1,11 +1,11 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesWindowIdUtils } from "chrome://browser/content/modules/workspaces/WorkspacesWindowIdUtils.mjs"
-import { WorkspacesDataSaver } from "chrome://browser/content/modules/workspaces/WorkspacesDataSaver.mjs"
+import { WorkspacesWindowIdUtils } from "chrome://floorp/content/modules/workspaces/WorkspacesWindowIdUtils.mjs"
+import { WorkspacesDataSaver } from "chrome://floorp/content/modules/workspaces/WorkspacesDataSaver.mjs"
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  PrivateContainer: "chrome://browser/content/modules/private-container/PrivateContainer.mjs",
+  PrivateContainer: "chrome://floorp/content/modules/private-container/PrivateContainer.mjs",
 });
 
 function generateUuid() {
@@ -304,9 +304,9 @@ export const workspaceIcons = new Set([
 
 export function getWorkspaceIconUrl(icon) {
   if (!workspaceIcons.has(icon) || icon == undefined) {
-    return "chrome://browser/skin/workspace-icons/fingerprint.svg";
+    return "chrome://floorp/skin/workspace-icons/fingerprint.svg";
   }
-  return `chrome://browser/skin/workspace-icons/${icon}.svg`;
+  return `chrome://floorp/skin/workspace-icons/${icon}.svg`;
 }
 
 export const workspacesPreferences = {
