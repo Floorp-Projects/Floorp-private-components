@@ -48,7 +48,7 @@ export const gSplitView = {
           order: 0 !important;
         }
 
-        #splitView-splitter {
+        #splitview-splitter {
           flex: 0 !important;
         }
         
@@ -65,15 +65,14 @@ export const gSplitView = {
       panel.classList.add("deck-selected");
 
       this.splitter = document.createXULElement("splitter");
-      this.splitter.setAttribute("id", "splitView-splitter");
+      this.splitter.setAttribute("id", "splitview-splitter");
       this.splitter.className = "deck-selected";
+      document.querySelector("#tabbrowser-tabpanels").appendChild(this.splitter);
 
       if (side == "left") {
-        document.querySelector(".deck-selected[splitview='left']").after(this.splitter);
-        document.getElementById("splitView-splitter").style.order = 1;
+        document.getElementById("splitview-splitter").style.order = 1;
       } else if (side == "right") {
-        document.querySelector(".deck-selected[splitview='right']").before(this.splitter);
-        document.getElementById("splitView-splitter").style.order = 3;
+        document.getElementById("splitview-splitter").style.order = 3;
       }
 
       if (!browserDocShellIsActiveState) {
@@ -97,7 +96,7 @@ export const gSplitView = {
       let CSSElem = document.getElementById("splitViewCSS");
       CSSElem?.remove();
 
-      document.querySelector("#splitView-splitter")?.remove();
+      document.querySelector("#splitview-splitter")?.remove();
       tab.removeAttribute("splitView");
       panel.removeAttribute("splitview");
       panel.removeAttribute("splitviewtab");
