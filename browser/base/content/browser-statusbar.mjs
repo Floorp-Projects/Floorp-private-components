@@ -23,9 +23,14 @@ export const gFloorpStatusBar = {
       }
     `,
     displayStatusbar: `
-      background: none !important;
-      border: none !important;
-      box-shadow: none !important;
+      #statuspanel-label {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      #statusBar {
+        visibility: visible !important;
+      }
     `,
   },
 
@@ -72,12 +77,18 @@ export const gFloorpStatusBar = {
     document.getElementById("statusBarCSS")?.remove();
     document.getElementById("status-text").style.overflow = "hidden";
     document.getElementById("status-text").appendChild(statuspanel_label);
-    statuspanel_label.setAttribute("style", this.CSS.displayStatusbar);
+    let Tag = document.createElement("style");
+    Tag.setAttribute("id", "statusBarCSS");
+    Tag.innerText = this.CSS.displayStatusbar;
+    document
+      .getElementsByTagName("head")[0]
+      .insertAdjacentElement("beforeend", Tag);
   },
 
   hideStatusbar() {
     let statuspanel_label = document.getElementById("statuspanel-label");
     let Tag = document.createElement("style");
+    document.getElementById("statusBarCSS")?.remove();
     Tag.setAttribute("id", "statusBarCSS");
     Tag.innerText = this.CSS.hideedStatusBar;
     document
