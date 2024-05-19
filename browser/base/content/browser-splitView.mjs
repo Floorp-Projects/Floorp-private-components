@@ -124,9 +124,12 @@ export const gSplitView = {
     },
 
     removeRenderLayersEvent() {
-      document.removeEventListener("floorpOnLocationChangeEvent", function () {
-        gSplitView.Functions.handleTabEvent();
+      let tabPanels = document.querySelectorAll("#tabbrowser-tabpanels > *");
+      tabPanels.forEach((panel) => {
+        panel.removeAttribute("width");
+        panel.removeAttribute("style");
       });
+      document.removeEventListener("floorpOnLocationChangeEvent");
     },
 
     handleTabEvent() {
