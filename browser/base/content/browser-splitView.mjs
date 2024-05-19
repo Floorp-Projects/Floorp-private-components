@@ -30,10 +30,11 @@ export const gSplitView = {
         elem.setAttribute("id", "splitViewCSS");
         elem.textContent = `
         #tabbrowser-tabpanels > * {
-          flex: 0;
+          display: none;
         }
         
         .deck-selected {
+          display: flex !important;
           flex: auto !important;
           order: 2;
         }
@@ -80,6 +81,26 @@ export const gSplitView = {
       }
 
       gSplitView.Functions.setRenderLayersEvent();
+
+      let currentSplitViewTab = document.querySelector(
+        `.tabbrowser-tab[splitView="true"]`
+      );
+      let currentSplitViewPanel = gSplitView.Functions.getlinkedPanel(
+        currentSplitViewTab?.linkedPanel
+      );
+
+      currentSplitViewPanel.style.width = `${document.getElementById("appcontent").clientWidth / 2 - 3}px`;
+      Services.prefs.setIntPref("floorp.browser.splitView.width", currentSplitViewPanel.clientWidth / 2);
+
+      const observer = new ResizeObserver(() => {
+        let currentTab = window.gBrowser.selectedTab;
+        if ((Services.prefs.getBoolPref("floorp.browser.splitView.working") === true) && (currentSplitViewTab !== currentTab)) {
+          let width = window.gBrowser.getPanel().clientWidth;
+          Services.prefs.setIntPref("floorp.browser.splitView.width", width);
+        }
+      });
+
+      observer.observe(document.querySelector("#tabbrowser-tabpanels [splitviewtab = true]"));
     },
 
     removeSplitView() {
@@ -119,6 +140,16 @@ export const gSplitView = {
 
     setRenderLayersEvent() {
       document.addEventListener("floorpOnLocationChangeEvent", function () {
+        let currentSplitViewTab = document.querySelector(
+          `.tabbrowser-tab[splitView="true"]`
+        );
+        let currentSplitViewPanel = gSplitView.Functions.getlinkedPanel(
+          currentSplitViewTab?.linkedPanel
+        );
+        if (currentSplitViewPanel !== window.gBrowser.getPanel()) {
+          window.gBrowser.getPanel().style.width = Services.prefs.getIntPref("floorp.browser.splitView.width") + "px";
+        }
+
         gSplitView.Functions.handleTabEvent();
       });
     },
@@ -129,6 +160,7 @@ export const gSplitView = {
         panel.removeAttribute("width");
         panel.removeAttribute("style");
       });
+
       document.removeEventListener("floorpOnLocationChangeEvent");
     },
 
