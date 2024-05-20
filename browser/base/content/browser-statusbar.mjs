@@ -8,8 +8,8 @@ export const gFloorpStatusBar = {
                  class="browser-toolbar customization-target" mode="icons" context="toolbar-context-menu" accesskey="A">
                  <hbox id="status-text" align="center" flex="1" class="statusbar-padding"/>
         </toolbar>
-      `,
-    )
+      `
+    ),
   },
 
   CSS: {
@@ -35,15 +35,16 @@ export const gFloorpStatusBar = {
   },
 
   init() {
-    document.getElementById("navigator-toolbox").appendChild(this.elements.statusbar);
+    document
+      .getElementById("navigator-toolbox")
+      .appendChild(this.elements.statusbar);
     window.CustomizableUI.registerArea("statusBar", {
       type: window.CustomizableUI.TYPE_TOOLBAR,
-      defaultPlacements: [
-        "screenshot-button",
-        "fullscreen-button",
-      ],
+      defaultPlacements: ["screenshot-button", "fullscreen-button"],
     });
-    window.CustomizableUI.registerToolbarNode(document.getElementById("statusBar"));
+    window.CustomizableUI.registerToolbarNode(
+      document.getElementById("statusBar")
+    );
 
     //move elem to bottom of window
     document.body.appendChild(document.getElementById("statusBar"));
@@ -55,13 +56,19 @@ export const gFloorpStatusBar = {
     contextMenu.id = "toggle_statusBar";
     contextMenu.setAttribute(
       "checked",
-      Services.prefs.getBoolPref("browser.display.statusbar"),
+      Services.prefs.getBoolPref("browser.display.statusbar")
     );
-    contextMenu.setAttribute("oncommand", "gFloorpStatusBar.changeStatusbarVisibility();");
+    contextMenu.setAttribute(
+      "oncommand",
+      "gFloorpStatusBar.changeStatusbarVisibility();"
+    );
     document.getElementById("toolbarItemsMenuSeparator").after(contextMenu);
 
     this.toggleStatusBar();
-    Services.prefs.addObserver("browser.display.statusbar", this.handlePrefChange);
+    Services.prefs.addObserver(
+      "browser.display.statusbar",
+      this.handlePrefChange
+    );
     this.observeStatusbar();
   },
 
@@ -102,19 +109,21 @@ export const gFloorpStatusBar = {
   toggleStatusBar() {
     const checked = Services.prefs.getBoolPref(
       "browser.display.statusbar",
-      false,
+      false
     );
     const toggleElement = document.getElementById("toggle_statusBar");
     toggleElement.setAttribute("checked", String(checked));
 
     // show/hide statusbar
-    checked ? gFloorpStatusBar.showStatusbar() : gFloorpStatusBar.hideStatusbar();
+    checked
+      ? gFloorpStatusBar.showStatusbar()
+      : gFloorpStatusBar.hideStatusbar();
   },
 
   handlePrefChange() {
     const checked = Services.prefs.getBoolPref(
       "browser.display.statusbar",
-      false,
+      false
     );
     const toggleElement = document.getElementById("toggle_statusBar");
     toggleElement.setAttribute("checked", String(checked));
