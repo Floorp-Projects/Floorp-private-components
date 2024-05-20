@@ -83,7 +83,7 @@ export const gSplitView = {
         browser.docShellIsActive = true;
       }
 
-      gSplitView.Functions.setRenderLayersEvent();
+      gSplitView.Functions.setLocationChangeEvent();
 
       let currentSplitViewTab = document.querySelector(
         `.tabbrowser-tab[splitView="true"]`
@@ -130,7 +130,13 @@ export const gSplitView = {
         window.browser.docShellIsActive = false;
       }
 
-      gSplitView.Functions.removeRenderLayersEvent();
+      let tabPanels = document.querySelectorAll("#tabbrowser-tabpanels > *");
+      tabPanels.forEach((tabPanel) => {
+        tabPanel.removeAttribute("width");
+        tabPanel.removeAttribute("style");
+      });
+
+      gSplitView.Functions.removeLocationChangeEvent();
 
       // set renderLayers to true & Set class to deck-selected
       window.gBrowser.selectedTab = tab;
@@ -141,33 +147,16 @@ export const gSplitView = {
       return panel;
     },
 
-    setRenderLayersEvent() {
+    setLocationChangeEvent() {
       document.addEventListener("floorpOnLocationChangeEvent", function () {
-
-        gSplitView.Functions.splitterHide();
-
-        let currentSplitViewTab = document.querySelector(
-          `.tabbrowser-tab[splitView="true"]`
-        );
-        let currentSplitViewPanel = gSplitView.Functions.getlinkedPanel(
-          currentSplitViewTab?.linkedPanel
-        );
-        if (currentSplitViewPanel !== window.gBrowser.getPanel()) {
-          window.gBrowser.getPanel().style.width = Services.prefs.getIntPref("floorp.browser.splitView.width") + "px";
-        }
-
-        gSplitView.Functions.handleTabEvent();
+        gSplitView.Functions.locationChange();
       });
     },
 
-    removeRenderLayersEvent() {
-      let tabPanels = document.querySelectorAll("#tabbrowser-tabpanels > *");
-      tabPanels.forEach((panel) => {
-        panel.removeAttribute("width");
-        panel.removeAttribute("style");
+    removeLocationChangeEvent() {
+      document.removeEventListener("floorpOnLocationChangeEvent", function () {
+        gSplitView.Functions.locationChange();
       });
-
-      document.removeEventListener("floorpOnLocationChangeEvent");
     },
 
     splitterHide() {
@@ -189,6 +178,22 @@ export const gSplitView = {
           splitterHideCSS.remove();
         }
       }
+    },
+
+    locationChange() {
+      gSplitView.Functions.splitterHide();
+
+      let currentSplitViewTab = document.querySelector(
+        `.tabbrowser-tab[splitView="true"]`
+      );
+      let currentSplitViewPanel = gSplitView.Functions.getlinkedPanel(
+        currentSplitViewTab?.linkedPanel
+      );
+      if (currentSplitViewPanel !== window.gBrowser.getPanel()) {
+        window.gBrowser.getPanel().style.width = Services.prefs.getIntPref("floorp.browser.splitView.width") + "px";
+      }
+
+      gSplitView.Functions.handleTabEvent();
     },
 
     handleTabEvent() {
