@@ -102,7 +102,7 @@ export const gSplitView = {
         currentSplitViewPanel.clientWidth / 2 - 3
       );
 
-      const observer = new ResizeObserver(() => {
+      window.splitViewResizeObserver = new ResizeObserver(() => {
         let currentTab = window.gBrowser.selectedTab;
         if (
           Services.prefs.getBoolPref("floorp.browser.splitView.working") ===
@@ -114,7 +114,7 @@ export const gSplitView = {
         }
       });
 
-      observer.observe(
+      window.splitViewResizeObserver.observe(
         document.querySelector("#tabbrowser-tabpanels [splitviewtab = true]")
       );
     },
@@ -150,6 +150,8 @@ export const gSplitView = {
       });
 
       gSplitView.Functions.removeLocationChangeEvent();
+
+      window.splitViewResizeObserver.disconnect();
 
       // set renderLayers to true & Set class to deck-selected
       window.gBrowser.selectedTab = tab;
