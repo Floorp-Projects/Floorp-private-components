@@ -32,13 +32,13 @@ export const gSplitView = {
         #tabbrowser-tabpanels > * {
           display: none;
         }
-        
+
         .deck-selected {
           display: flex !important;
           flex: auto !important;
           order: 2;
         }
-        
+
         .deck-selected[splitview="right"] {
           flex: auto !important;
           order: 4 !important;
@@ -53,7 +53,7 @@ export const gSplitView = {
           flex: 0 !important;
           border: none;
         }
-        
+
         #tabbrowser-tabpanels {
           display: flex !important;
         }
@@ -71,7 +71,9 @@ export const gSplitView = {
       this.splitter = document.createXULElement("splitter");
       this.splitter.setAttribute("id", "splitview-splitter");
       this.splitter.className = "deck-selected";
-      document.querySelector("#tabbrowser-tabpanels").appendChild(this.splitter);
+      document
+        .querySelector("#tabbrowser-tabpanels")
+        .appendChild(this.splitter);
 
       if (side == "left") {
         document.getElementById("splitview-splitter").style.order = 1;
@@ -92,18 +94,29 @@ export const gSplitView = {
         currentSplitViewTab?.linkedPanel
       );
 
-      currentSplitViewPanel.style.width = `${document.getElementById("appcontent").clientWidth / 2 - 3}px`;
-      Services.prefs.setIntPref("floorp.browser.splitView.width", currentSplitViewPanel.clientWidth / 2 - 3);
+      currentSplitViewPanel.style.width = `${
+        document.getElementById("appcontent").clientWidth / 2 - 3
+      }px`;
+      Services.prefs.setIntPref(
+        "floorp.browser.splitView.width",
+        currentSplitViewPanel.clientWidth / 2 - 3
+      );
 
       const observer = new ResizeObserver(() => {
         let currentTab = window.gBrowser.selectedTab;
-        if ((Services.prefs.getBoolPref("floorp.browser.splitView.working") === true) && (currentSplitViewTab !== currentTab)) {
+        if (
+          Services.prefs.getBoolPref("floorp.browser.splitView.working") ===
+            true &&
+          currentSplitViewTab !== currentTab
+        ) {
           let width = window.gBrowser.getPanel().clientWidth;
           Services.prefs.setIntPref("floorp.browser.splitView.width", width);
         }
       });
 
-      observer.observe(document.querySelector("#tabbrowser-tabpanels [splitviewtab = true]"));
+      observer.observe(
+        document.querySelector("#tabbrowser-tabpanels [splitviewtab = true]")
+      );
     },
 
     removeSplitView() {
@@ -131,7 +144,7 @@ export const gSplitView = {
       }
 
       let tabPanels = document.querySelectorAll("#tabbrowser-tabpanels > *");
-      tabPanels.forEach((tabPanel) => {
+      tabPanels.forEach(tabPanel => {
         tabPanel.removeAttribute("width");
         tabPanel.removeAttribute("style");
       });
@@ -148,19 +161,24 @@ export const gSplitView = {
     },
 
     setLocationChangeEvent() {
-      document.addEventListener("floorpOnLocationChangeEvent", function () {
-        gSplitView.Functions.locationChange();
-      });
+      document.addEventListener(
+        "floorpOnLocationChangeEvent",
+        gSplitView.Functions.locationChange
+      );
     },
 
     removeLocationChangeEvent() {
-      document.removeEventListener("floorpOnLocationChangeEvent", function () {
-        gSplitView.Functions.locationChange();
-      });
+      document.removeEventListener(
+        "floorpOnLocationChangeEvent",
+        gSplitView.Functions.locationChange
+      );
     },
 
     splitterHide() {
-      if (window.gBrowser.selectedTab === document.querySelector(".tabbrowser-tab[splitView='true']")) {
+      if (
+        window.gBrowser.selectedTab ===
+        document.querySelector(".tabbrowser-tab[splitView='true']")
+      ) {
         let splitterHideCSS = document.getElementById("splitterHideCSS");
         if (!splitterHideCSS) {
           let elem = document.createElement("style");
@@ -190,7 +208,8 @@ export const gSplitView = {
         currentSplitViewTab?.linkedPanel
       );
       if (currentSplitViewPanel !== window.gBrowser.getPanel()) {
-        window.gBrowser.getPanel().style.width = Services.prefs.getIntPref("floorp.browser.splitView.width") + "px";
+        window.gBrowser.getPanel().style.width =
+          Services.prefs.getIntPref("floorp.browser.splitView.width") + "px";
       }
 
       gSplitView.Functions.handleTabEvent();
