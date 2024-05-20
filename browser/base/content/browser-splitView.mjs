@@ -51,6 +51,7 @@ export const gSplitView = {
 
         #splitview-splitter {
           flex: 0 !important;
+          border: none;
         }
         
         #tabbrowser-tabpanels {
@@ -64,6 +65,8 @@ export const gSplitView = {
       panel.setAttribute("splitview", side);
       panel.setAttribute("splitviewtab", true);
       panel.classList.add("deck-selected");
+
+      gSplitView.Functions.splitterHide();
 
       this.splitter = document.createXULElement("splitter");
       this.splitter.setAttribute("id", "splitview-splitter");
@@ -90,7 +93,7 @@ export const gSplitView = {
       );
 
       currentSplitViewPanel.style.width = `${document.getElementById("appcontent").clientWidth / 2 - 3}px`;
-      Services.prefs.setIntPref("floorp.browser.splitView.width", currentSplitViewPanel.clientWidth / 2);
+      Services.prefs.setIntPref("floorp.browser.splitView.width", currentSplitViewPanel.clientWidth / 2 - 3);
 
       const observer = new ResizeObserver(() => {
         let currentTab = window.gBrowser.selectedTab;
@@ -140,6 +143,9 @@ export const gSplitView = {
 
     setRenderLayersEvent() {
       document.addEventListener("floorpOnLocationChangeEvent", function () {
+
+        gSplitView.Functions.splitterHide();
+
         let currentSplitViewTab = document.querySelector(
           `.tabbrowser-tab[splitView="true"]`
         );
@@ -162,6 +168,27 @@ export const gSplitView = {
       });
 
       document.removeEventListener("floorpOnLocationChangeEvent");
+    },
+
+    splitterHide() {
+      if (window.gBrowser.selectedTab === document.querySelector(".tabbrowser-tab[splitView='true']")) {
+        let splitterHideCSS = document.getElementById("splitterHideCSS");
+        if (!splitterHideCSS) {
+          let elem = document.createElement("style");
+          elem.setAttribute("id", "splitterHideCSS");
+          elem.textContent = `
+          #splitview-splitter {
+            display: none !important;
+          }
+          `;
+          document.head.appendChild(elem);
+        }
+      } else {
+        let splitterHideCSS = document.getElementById("splitterHideCSS");
+        if (splitterHideCSS) {
+          splitterHideCSS.remove();
+        }
+      }
     },
 
     handleTabEvent() {
