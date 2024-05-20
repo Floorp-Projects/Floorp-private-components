@@ -137,7 +137,9 @@ export const gSplitView = {
       tab.removeAttribute("splitView");
       panel.removeAttribute("splitview");
       panel.removeAttribute("splitviewtab");
-      panel.classList.remove("deck-selected");
+      if (tab !== window.gBrowser.selectedTab) {
+        panel.classList.remove("deck-selected");
+      }
 
       if (window.browser.docShellIsActive) {
         window.browser.docShellIsActive = false;
