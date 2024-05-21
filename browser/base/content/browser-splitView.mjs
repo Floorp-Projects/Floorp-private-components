@@ -94,12 +94,17 @@ export const gSplitView = {
         currentSplitViewTab?.linkedPanel
       );
 
+      const panelWidth = document.getElementById("appcontent").clientWidth / 2 - 3;
+
       currentSplitViewPanel.style.width = `${
-        document.getElementById("appcontent").clientWidth / 2 - 3
+        panelWidth
       }px`;
+      if (currentSplitViewTab !== window.gBrowser.selectedTab) {
+        window.gBrowser.getPanel().style.width = panelWidth + "px";
+      }
       Services.prefs.setIntPref(
         "floorp.browser.splitView.width",
-        currentSplitViewPanel.clientWidth / 2 - 3
+        panelWidth
       );
 
       window.splitViewResizeObserver = new ResizeObserver(() => {
@@ -154,9 +159,6 @@ export const gSplitView = {
       gSplitView.Functions.removeLocationChangeEvent();
 
       window.splitViewResizeObserver.disconnect();
-
-      // set renderLayers to true & Set class to deck-selected
-      window.gBrowser.selectedTab = tab;
     },
 
     getlinkedPanel(id) {
