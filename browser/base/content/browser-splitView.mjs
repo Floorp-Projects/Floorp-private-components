@@ -1,4 +1,3 @@
-/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
 export const gSplitView = {
   Functions: {
@@ -26,39 +25,12 @@ export const gSplitView = {
 
       let CSSElem = document.getElementById("splitViewCSS");
       if (!CSSElem) {
-        let elem = document.createElement("style");
-        elem.setAttribute("id", "splitViewCSS");
-        elem.textContent = `
-        #tabbrowser-tabpanels > * {
-          display: none;
-        }
-
-        .deck-selected {
-          display: flex !important;
-          flex: auto !important;
-          order: 2;
-        }
-
-        .deck-selected[splitview="right"] {
-          flex: auto !important;
-          order: 4 !important;
-        }
-
-        .deck-selected[splitview="left"] {
-          flex: auto !important;
-          order: 0 !important;
-        }
-
-        #splitview-splitter {
-          flex: 0 !important;
-          border: none;
-        }
-
-        #tabbrowser-tabpanels {
-          display: flex !important;
-        }
-        `;
-        document.head.appendChild(elem);
+        // Add splitview css to head tag
+        const splitViewTag = document.createElement("link");
+        splitViewTag.setAttribute("id", "splitViewCSS");
+        splitViewTag.rel = "stylesheet";
+        splitViewTag.href = "chrome://floorp/content/browser-splitView.css";
+        document.head.append(splitViewTag)
       }
 
       tab.setAttribute("splitView", true);
@@ -75,9 +47,9 @@ export const gSplitView = {
         .querySelector("#tabbrowser-tabpanels")
         .appendChild(this.splitter);
 
-      if (side == "left") {
+      if (side === "left") {
         document.getElementById("splitview-splitter").style.order = 1;
-      } else if (side == "right") {
+      } else {
         document.getElementById("splitview-splitter").style.order = 3;
       }
 
@@ -87,26 +59,22 @@ export const gSplitView = {
 
       gSplitView.Functions.setLocationChangeEvent();
 
+      // Save splitView resized size to pref
       let currentSplitViewTab = document.querySelector(
         `.tabbrowser-tab[splitView="true"]`
       );
       let currentSplitViewPanel = gSplitView.Functions.getlinkedPanel(
         currentSplitViewTab?.linkedPanel
       );
-
-      const panelWidth = document.getElementById("appcontent").clientWidth / 2 - 3;
-
-      currentSplitViewPanel.style.width = `${
-        panelWidth
-      }px`;
+      const panelWidth =
+        document.getElementById("appcontent").clientWidth / 2 - 3;
+      currentSplitViewPanel.style.width = `${panelWidth}px`;
       if (currentSplitViewTab !== window.gBrowser.selectedTab) {
         window.gBrowser.getPanel().style.width = panelWidth + "px";
       }
-      Services.prefs.setIntPref(
-        "floorp.browser.splitView.width",
-        panelWidth
-      );
+      Services.prefs.setIntPref("floorp.browser.splitView.width", panelWidth);
 
+      // Observer
       window.splitViewResizeObserver = new ResizeObserver(() => {
         let currentTab = window.gBrowser.selectedTab;
         if (
@@ -128,7 +96,6 @@ export const gSplitView = {
       Services.prefs.setBoolPref("floorp.browser.splitView.working", false);
 
       let tab = document.querySelector(`.tabbrowser-tab[splitView="true"]`);
-
       if (!tab) {
         return;
       }
@@ -157,7 +124,6 @@ export const gSplitView = {
       });
 
       gSplitView.Functions.removeLocationChangeEvent();
-
       window.splitViewResizeObserver.disconnect();
     },
 
