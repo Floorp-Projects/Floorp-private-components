@@ -27,3 +27,16 @@
 #tabbrowser-tabpanels {
     display: flex !important;
 }
+
+.tabbrowser-tab[splitView="true"] {
+    display: flex;
+    flex-direction: row;
+}
+
+.tabbrowser-tab[splitView="true"]::before {
+    content: "";
+    position: inherit;
+    background: red;
+    width: 2px;
+    height: inherit;
+}
