@@ -1,3 +1,5 @@
+/* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
+
 export const gSplitView = {
   Functions: {
     init() {
