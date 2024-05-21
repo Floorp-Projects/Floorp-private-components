@@ -1,4 +1,3 @@
-
 export const gSplitView = {
   Functions: {
     init() {
@@ -30,7 +29,7 @@ export const gSplitView = {
         splitViewTag.setAttribute("id", "splitViewCSS");
         splitViewTag.rel = "stylesheet";
         splitViewTag.href = "chrome://floorp/content/browser-splitView.css";
-        document.head.append(splitViewTag)
+        document.head.append(splitViewTag);
       }
 
       tab.setAttribute("splitView", true);
