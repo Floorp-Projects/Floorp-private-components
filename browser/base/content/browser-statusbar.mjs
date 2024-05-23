@@ -31,6 +31,9 @@ export const gFloorpStatusBar = {
       #statusBar {
         visibility: visible !important;
       }
+      :root[inFullscreen]:not([macOSNativeFullscreen]) #statusBar:not([fullscreentoolbar="true"]) {
+        visibility: collapse !important;
+      }
     `,
   },
 
