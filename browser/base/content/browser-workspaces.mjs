@@ -14,6 +14,7 @@ import {
 } from "resource://floorp/WorkspacesService.mjs";
 
 import { gFloorpContextMenu } from "chrome://floorp/content/browser-context-menu.mjs";
+import { gBmsWindow } from "./browser-bms-window.mjs";
 
 /* Mozilla's ES Module. It can be impoted via ChromeUtils */
 var { CustomizableUI } = ChromeUtils.importESModule(
@@ -1093,7 +1094,7 @@ export const gWorkspaces = {
 
   /* init */
   async init() {
-    if (this._initialized) {
+    if (this._initialized || gBmsWindow.isBmsWindow) {
       return;
     }
 

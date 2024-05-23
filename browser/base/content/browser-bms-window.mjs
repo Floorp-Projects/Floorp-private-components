@@ -32,6 +32,10 @@ export var gBmsWindow = {
     return data[id];
   },
 
+  get isBmsWindow() {
+    return !!this.currentURL.searchParams.get("floorpWebPanelId");
+  },
+
   init() {
     if (this._initialized) {
       return;
