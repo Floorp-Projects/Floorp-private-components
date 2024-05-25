@@ -506,7 +506,7 @@ export const gWorkspaces = {
 
   async removeWindowWorkspacesDataById() {
     let windowId = this.getCurrentWindowId();
-    await WorkspacesIdUtils.removeWindowWorkspacesDataById(windowId);
+    await WorkspacesWindowIdUtils.removeWindowWorkspacesDataById(windowId);
   },
 
   /* Workspaces manager */

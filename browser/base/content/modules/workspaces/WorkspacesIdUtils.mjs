@@ -1,31 +1,33 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesWindowIdUtils } from "./WorkspacesWindowIdUtils.mjs"
-import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs"
-import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs"
+import { WorkspacesWindowIdUtils } from "./WorkspacesWindowIdUtils.mjs";
+import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs";
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  PrivateContainer: "chrome://floorp/content/modules/private-container/PrivateContainer.mjs",
+  PrivateContainer:
+    "chrome://floorp/content/modules/private-container/PrivateContainer.mjs",
 });
 
 export const WorkspacesIdUtils = {
   async getWorkspaceByIdAndWindowId(workspaceId, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     return workspacesData[workspaceId];
   },
 
   async workspaceIdExists(workspaceId, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     return workspacesData.hasOwnProperty(workspaceId);
   },
 
   async getWorkspaceContainerUserContextId(workspaceId, windowId) {
     let workspace = await this.getWorkspaceByIdAndWindowId(
       workspaceId,
-      windowId,
+      windowId
     );
 
     if (!workspace.userContextId) {
@@ -45,45 +47,16 @@ export const WorkspacesIdUtils = {
   async getWorkspaceIcon(workspaceId, windowId) {
     let workspace = await this.getWorkspaceByIdAndWindowId(
       workspaceId,
-      windowId,
+      windowId
     );
     return workspace.icon;
   },
 
   async removeWorkspaceById(workspaceId, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     delete workspacesData[workspaceId];
     await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
-  },
-
-  async removeWindowWorkspacesDataById(windowId) {
-    let json = await IOUtils.readJSON(
-      WorkspacesExternalFileService._workspacesStoreFile,
-    );
-    delete json.windows[windowId];
-
-    await IOUtils.writeJSON(
-      WorkspacesExternalFileService._workspacesStoreFile,
-      json,
-    );
-  },
-
-  async removeWindowTabsDataById(windowId) {
-    let json = await IOUtils.readJSON(
-      WorkspacesExternalFileService._workspacesStoreFile,
-    );
-    let windowWorkspacesData = json.windows[windowId];
-    for (let workspaceId in windowWorkspacesData) {
-      let workspace = windowWorkspacesData[workspaceId];
-      if (workspace.tabs) {
-        workspace.tabs = [];
-      }
-    }
-
-    await IOUtils.writeJSON(
-      WorkspacesExternalFileService._workspacesStoreFile,
-      json,
-    );
   },
 };

@@ -1,6 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs"
+import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs";
 
 export const WorkspacesWindowIdUtils = {
   get _workspacesStoreFile() {
@@ -73,9 +73,40 @@ export const WorkspacesWindowIdUtils = {
   },
 
   async getAllWorkspacesId(windowId) {
-    let workspacesData =
-      await this.getWindowWorkspacesDataWithoutPreferences(windowId);
+    let workspacesData = await this.getWindowWorkspacesDataWithoutPreferences(
+      windowId
+    );
     let workspacesIds = Object.keys(workspacesData);
     return workspacesIds;
+  },
+
+  async removeWindowWorkspacesDataById(windowId) {
+    let json = await IOUtils.readJSON(
+      WorkspacesExternalFileService._workspacesStoreFile
+    );
+    delete json.windows[windowId];
+
+    await IOUtils.writeJSON(
+      WorkspacesExternalFileService._workspacesStoreFile,
+      json
+    );
+  },
+
+  async removeWindowTabsDataById(windowId) {
+    let json = await IOUtils.readJSON(
+      WorkspacesExternalFileService._workspacesStoreFile
+    );
+    let windowWorkspacesData = json.windows[windowId];
+    for (let workspaceId in windowWorkspacesData) {
+      let workspace = windowWorkspacesData[workspaceId];
+      if (workspace.tabs) {
+        workspace.tabs = [];
+      }
+    }
+
+    await IOUtils.writeJSON(
+      WorkspacesExternalFileService._workspacesStoreFile,
+      json
+    );
   },
 };
