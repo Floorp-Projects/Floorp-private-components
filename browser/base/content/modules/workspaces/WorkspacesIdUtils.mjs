@@ -1,6 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesWindowIdUtils } from "./WorkspacesWindowIdUtils.mjs";
+import { WorkspacesWindowIdUtils } from "resource://floorp/WorkspacesWindowIdUtils.mjs";
 import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs";
 
 const lazy = {};

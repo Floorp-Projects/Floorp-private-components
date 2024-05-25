@@ -3,8 +3,8 @@
 import { WorkspacesMigratorUtils } from "./modules/workspaces/WorkspacesMigratorUtils.mjs";
 import { WorkspacesIdUtils } from "./modules/workspaces/WorkspacesIdUtils.mjs";
 import { WorkspacesElementService } from "./modules/workspaces/WorkspacesElementService.mjs";
-import { WorkspacesWindowIdUtils } from "./modules/workspaces/WorkspacesWindowIdUtils.mjs";
 import { WorkspacesDataSaver } from "./modules/workspaces/WorkspacesDataSaver.mjs";
+import { WorkspacesWindowIdUtils } from "resource://floorp/WorkspacesWindowIdUtils.mjs";
 import {
   WorkspacesService,
   WorkspacesReorderService,

@@ -19,7 +19,6 @@ floorp.jar:
   content/modules/workspaces/WorkspacesExternalFileService.mjs  (content/modules/workspaces/WorkspacesExternalFileService.mjs)
   content/modules/workspaces/WorkspacesIdUtils.mjs              (content/modules/workspaces/WorkspacesIdUtils.mjs)
   content/modules/workspaces/WorkspacesMigratorUtils.mjs        (content/modules/workspaces/WorkspacesMigratorUtils.mjs)
-  content/modules/workspaces/WorkspacesWindowIdUtils.mjs        (content/modules/workspaces/WorkspacesWindowIdUtils.mjs)
 
 # style sheet
   content/browser-bms-window.css                       (content/browser-bms-window.css)

@@ -1,6 +1,6 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesExternalFileService } from "./WorkspacesExternalFileService.mjs";
+import { WorkspacesExternalFileService } from "chrome://floorp/content/modules/workspaces/WorkspacesExternalFileService.mjs";
 
 export const WorkspacesWindowIdUtils = {
   get _workspacesStoreFile() {
