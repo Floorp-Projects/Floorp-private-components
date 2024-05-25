@@ -105,7 +105,7 @@ export const WorkspacesWindowIdUtils = {
     }
 
     await IOUtils.writeJSON(
-      WorkspacesExternalFileService._workspacesStoreFile,
+      this._workspacesStoreFile,
       json
     );
   },
