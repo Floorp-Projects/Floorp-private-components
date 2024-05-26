@@ -130,6 +130,4 @@ export var gBmsWindow = {
   },
 };
 
-if (Services.prefs.getBoolPref("floorp.browser.sidebar2.addons.enabled")) {
-  gBmsWindow.init();
-}
+gBmsWindow.init();
