@@ -7,7 +7,6 @@ floorp.jar:
   content/browser-custom-keyboard-shortcut.mjs          (content/browser-custom-keyboard-shortcut.mjs)
   content/browser-favicon-color.mjs                     (content/browser-favicon-color.mjs)
   content/browser-splitView.mjs                         (content/browser-splitView.mjs)
-  content/browser-statusbar.mjs                         (content/browser-statusbar.mjs)
   content/browser-UI-customizing-menu.mjs               (content/browser-UI-customizing-menu.mjs)
   content/browser-workspaces.mjs                        (content/browser-workspaces.mjs)
 
