@@ -77,6 +77,7 @@ export const keyboradShortcutActions = {
     zoomOut: ["FullZoom.reduce()", "zoom-out", "visible-action"],
     resetZoom: ["FullZoom.reset()", "reset-zoom", "visible-action"],
     hideInterface: ["gFloorpDesign.hideUserInterface()", "hide-user-interface", "visible-action"],
+    toggleNavigationPanel: ["gFloorpDesign.toggleNavigationPanel()", "toggle-navigation-panel", "visible-action"],
 
     // History actions
     back: ["BrowserBack()", "back", "history-action"],
