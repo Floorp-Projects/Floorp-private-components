@@ -3,12 +3,6 @@
 import { WorkspacesWindowIdUtils } from "resource://floorp/WorkspacesWindowIdUtils.mjs";
 import { WorkspacesDataSaver } from "./WorkspacesDataSaver.mjs";
 
-const lazy = {};
-ChromeUtils.defineESModuleGetters(lazy, {
-  PrivateContainer:
-    "chrome://floorp/content/modules/private-container/PrivateContainer.mjs",
-});
-
 export const WorkspacesIdUtils = {
   async getWorkspaceByIdAndWindowId(workspaceId, windowId) {
     let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
@@ -38,7 +32,7 @@ export const WorkspacesIdUtils = {
        userContextId from the private container. Private Container doesn't
        has fixed userContextId. */
     if (workspace.isPrivateContainerWorkspace) {
-      return lazy.PrivateContainer.Functions.getPrivateContainerUserContextId();
+      return window.gFloorpPrivateContainer.getPrivateContainerUserContextId();
     }
 
     return workspace.userContextId;

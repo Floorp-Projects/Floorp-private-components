@@ -1,12 +1,7 @@
 /* -*- indent-tabs-mode: nil; js-indent-level: 2 -*- */
 
-import { WorkspacesWindowIdUtils } from "resource://floorp/WorkspacesWindowIdUtils.mjs"
-import { WorkspacesDataSaver } from "chrome://floorp/content/modules/workspaces/WorkspacesDataSaver.mjs"
-
-const lazy = {};
-ChromeUtils.defineESModuleGetters(lazy, {
-  PrivateContainer: "chrome://floorp/content/modules/private-container/PrivateContainer.mjs",
-});
+import { WorkspacesWindowIdUtils } from "resource://floorp/WorkspacesWindowIdUtils.mjs";
+import { WorkspacesDataSaver } from "chrome://floorp/content/modules/workspaces/WorkspacesDataSaver.mjs";
 
 function generateUuid() {
   return Services.uuid.generateUUID().toString();
@@ -39,7 +34,7 @@ export const WorkspacesService = {
   get workspaceEnabled() {
     return Services.prefs.getBoolPref(
       workspacesPreferences.WORKSPACES_ENABLED_PREF,
-      false,
+      false
     );
   },
 
@@ -51,15 +46,22 @@ export const WorkspacesService = {
    * @param {boolean} [defaultWorkspace=false] - Whether the workspace is the default workspace.
    * @returns {Promise<string>} A promise that resolves with the ID of the created workspace.
    */
-  async createWorkspace(workspaceName, windowId, defaultWorkspace, icon, setSelected) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+  async createWorkspace(
+    workspaceName,
+    windowId,
+    defaultWorkspace,
+    icon,
+    setSelected
+  ) {
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     let workspaceId = generateUuid();
     let workspaceData = {
       name: workspaceName,
       tabs: [],
       defaultWorkspace: defaultWorkspace || false,
-      id:  workspaceId,
+      id: workspaceId,
       icon,
     };
 
@@ -82,8 +84,9 @@ export const WorkspacesService = {
    * @returns {Promise<void>} A promise that resolves when the workspace is deleted.
    */
   async deleteWorkspace(workspaceId, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     delete workspacesData[workspaceId];
     await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
@@ -97,8 +100,9 @@ export const WorkspacesService = {
    * @returns {Promise<void>} A promise that resolves when the workspace is renamed.
    */
   async renameWorkspace(workspaceId, newName, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     workspacesData[workspaceId].name = newName;
     await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
@@ -111,8 +115,9 @@ export const WorkspacesService = {
    * @returns {Promise<void>} A promise that resolves when the default workspace is set.
    */
   async setDefaultWorkspace(workspaceId, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     workspacesData.preferences = {
       defaultWorkspace: workspaceId,
     };
@@ -127,8 +132,9 @@ export const WorkspacesService = {
    * @returns {Promise<void>} A promise that resolves when the selected workspace is set.
    */
   async setSelectWorkspace(workspaceId, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
 
     if (!workspacesData.preferences) {
       workspacesData.preferences = {};
@@ -152,16 +158,18 @@ export const WorkspacesService = {
     workspaceId,
     userContextId,
     icon,
-    windowId,
+    windowId
   ) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     workspacesData[workspaceId].userContextId = userContextId;
     workspacesData[workspaceId].icon = icon;
     workspacesData[workspaceId].isPrivateContainerWorkspace = false;
 
     // Check selected container is private container
-    let privateContainerId = lazy.PrivateContainer.Functions.getPrivateContainerUserContextId();
+    let privateContainerId =
+      window.gFloorpPrivateContainer.getPrivateContainerUserContextId();
     if (privateContainerId && userContextId == privateContainerId) {
       workspacesData[workspaceId].isPrivateContainerWorkspace = true;
     }
@@ -178,8 +186,9 @@ export const WorkspacesService = {
    * @returns {Promise<void>} A promise that resolves when the icon is set.
    */
   async setWorkspaceIcon(workspaceId, icon, windowId) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     workspacesData[workspaceId].icon = icon;
     await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
@@ -195,10 +204,11 @@ export const WorkspacesService = {
   async setWorkspaceContainerUserContextId(
     workspaceId,
     userContextId,
-    windowId,
+    windowId
   ) {
-    let workspacesData =
-      await WorkspacesWindowIdUtils.getWindowWorkspacesData(windowId);
+    let workspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesData(
+      windowId
+    );
     workspacesData[workspaceId].userContextId = userContextId;
     await WorkspacesDataSaver.saveWorkspacesData(workspacesData, windowId);
   },
@@ -219,22 +229,28 @@ export const WorkspacesReorderService = {
    * @param {string} windowId - The ID of the window containing the workspaces.
    */
   async reorderWorkspaceUp(workspaceId, windowId) {
-    const currentWorkspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
+    const currentWorkspacesData =
+      await WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(
+        windowId
+      );
     const keys = Object.keys(currentWorkspacesData);
     const index = keys.indexOf(workspaceId);
 
     if (index > 0) {
-        keys.splice(index, 1);
-        keys.splice(index - 1, 0, workspaceId);
+      keys.splice(index, 1);
+      keys.splice(index - 1, 0, workspaceId);
 
-        let newWorkspacesData = {};
-        keys.forEach(key => {
-            newWorkspacesData[key] = currentWorkspacesData[key];
-        });
+      let newWorkspacesData = {};
+      keys.forEach(key => {
+        newWorkspacesData[key] = currentWorkspacesData[key];
+      });
 
-        await WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
+      await WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(
+        newWorkspacesData,
+        windowId
+      );
     } else {
-        console.error("Cannot move the first workspace before.");
+      console.error("Cannot move the first workspace before.");
     }
   },
 
@@ -246,21 +262,27 @@ export const WorkspacesReorderService = {
    */
 
   async reorderWorkspaceDown(workspaceId, windowId) {
-    const currentWorkspacesData = await WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(windowId);
+    const currentWorkspacesData =
+      await WorkspacesWindowIdUtils.getWindowWorkspacesDataWithoutPreferences(
+        windowId
+      );
     const keys = Object.keys(currentWorkspacesData);
     const index = keys.indexOf(workspaceId);
 
     if (index < keys.length - 1 && index > -1) {
-        keys.splice(index, 1);
-        keys.splice(index + 1, 0, workspaceId);
+      keys.splice(index, 1);
+      keys.splice(index + 1, 0, workspaceId);
 
-        let newWorkspacesData = {};
-        keys.forEach(key => {
-            newWorkspacesData[key] = currentWorkspacesData[key];
-        });
-        await WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(newWorkspacesData, windowId);
+      let newWorkspacesData = {};
+      keys.forEach(key => {
+        newWorkspacesData[key] = currentWorkspacesData[key];
+      });
+      await WorkspacesDataSaver.saveWorkspacesDataWithoutOverwritingPreferences(
+        newWorkspacesData,
+        windowId
+      );
     } else {
-        console.error("Cannot move the first workspace after.");
+      console.error("Cannot move the first workspace after.");
     }
   },
 };
