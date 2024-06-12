@@ -125,9 +125,7 @@ const gFloorpFaviconColor = {
   },
 
   setFaviconColorToTitlebar() {
-    const base64Image = document.querySelector(
-      '.tab-icon-image[selected="true"]'
-    )?.src;
+    const base64Image = gBrowser.selectedTab.querySelector('.tab-icon-image')?.src;
     const base64ImageWithoutHeader = base64Image?.split(",")[1];
 
     gFloorpFaviconColor
